@@ -4,4 +4,5 @@ Ce dépôt Git contient les différents sujets de TP du cours d'IHM Avancée - I
 
 Groupe:  
 * Xavier Devos  
-* Léo Jan
+* Léo Jan   
+* Eva Bardou
