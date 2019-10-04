@@ -33,280 +33,193 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
-/**
- * A generic implementation of BoundedRangeModel.
- * <p>
- * <strong>Warning:</strong> Serialized objects of this class will not be
- * compatible with future Swing releases. The current serialization support is
- * appropriate for short term storage or RMI between applications running the
- * same version of Swing. As of 1.4, support for long term storage of all
- * JavaBeans&trade; has been added to the <code>java.beans</code> package.
- * Please see {@link java.beans.XMLEncoder}.
- *
- * @author David Kloba
- * @author Hans Muller
- * @see BoundedRangeModel
- * @since 1.2
- */
 @SuppressWarnings("serial") // Same-version serialization only
-public class DefaultBoundedRangeSliderModel implements BoundedRangeModel, Serializable {
-	/**
-	 * Only one <code>ChangeEvent</code> is needed per model instance since the
-	 * event's only (read-only) state is the source property. The source of events
-	 * generated here is always "this".
-	 */
+public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, Serializable {
+
 	protected transient ChangeEvent changeEvent = null;
 
-	/** The listeners waiting for model changes. */
 	protected EventListenerList listenerList = new EventListenerList();
 
-	private int value = 0;
-	private int extent = 0;
+	private int lowerValue = 0;
+	private int upperValue = 0;
+	private int lowerExtent = 0;
+	private int upperExtent = 0;
 	private int min = 0;
 	private int max = 100;
 	private boolean isAdjusting = false;
 
-	/**
-     * Initializes all of the properties with default values.
-     * Those values are:
-     * <ul>
-     * <li><code>value</code> = 0
-     * <li><code>extent</code> = 0
-     * <li><code>minimum</code> = 0
-     * <li><code>maximum</code> = 100
-     * <li><code>adjusting</code> = false
-     * </ul>
-     */
-    public DefaultBoundedRangeSliderModel() {
+	public DefaultBoundedRangeSliderModel() {
 		// TODO Auto-generated constructor stub
-
-    }
-
-	/**
-     * Initializes value, extent, minimum and maximum. Adjusting is false.
-     * Throws an <code>IllegalArgumentException</code> if the following
-     * constraints aren't satisfied:
-     * <pre>
-     * min &lt;= value &lt;= value+extent &lt;= max
-     * </pre>
-     *
-     * @param value  an int giving the current value
-     * @param extent the length of the inner range that begins at the model's value
-     * @param min    an int giving the minimum value
-     * @param max    an int giving the maximum value
-     */
-    public DefaultBoundedRangeSliderModel(int value1, int value2, int extent, int min, int max, boolean firstCursor)
-    {
-        if ((max >= min) &&
-            (value1 >= min) &&
-            ((value1 + extent ) >= min && firstCursor) &&
-            ((value1 + extent ) <= max && firstCursor) &&
-            (value2 <=max) &&
-            (value2 + extent <= max && !firstCursor)&&
-            (value2 + extent ) >= min && !firstCursor) {
-            this.value = value;
-            this.extent = extent;
-            this.min = min;
-            this.max = max;
-        }
-        else {
-            throw new IllegalArgumentException("invalid range properties");
-        }
-    }
-
-	/**
-	 * Returns the model's current value.
-	 * 
-	 * @return the model's current value
-	 * @see #setValue
-	 * @see BoundedRangeModel#getValue
-	 */
-	public int getValue() {
-		return value;
 	}
 
 	/**
-	 * Returns the model's extent.
+	 * Initializes value, extent, minimum and maximum. Adjusting is false. Throws an
+	 * <code>IllegalArgumentException</code> if the following constraints aren't
+	 * satisfied:
 	 * 
-	 * @return the model's extent
-	 * @see #setExtent
-	 * @see BoundedRangeModel#getExtent
+	 * <pre>
+	 * min &lt;= value &lt;= value + extent &lt;= max
+	 * </pre>
+	 *
+	 * @param value  an int giving the current value
+	 * @param extent the length of the inner range that begins at the model's value
+	 * @param min    an int giving the minimum value
+	 * @param max    an int giving the maximum value
 	 */
-	public int getExtent() {
-		return extent;
+	public DefaultBoundedRangeSliderModel(int lowVal, int upVal, int lowExt, int upExt, int min, int max) {
+
+		if ((min <= lowVal && lowVal <= lowVal + lowExt && lowVal + lowExt <= upVal && upVal <= upVal + upExt
+				&& upVal + upExt <= max)) {
+			this.lowerValue = lowVal;
+			this.upperValue = upVal;
+			this.lowerExtent = lowExt;
+			this.upperExtent = upExt;
+			this.min = min;
+			this.max = max;
+		} else {
+			throw new IllegalArgumentException("invalid range properties");
+		}
 	}
 
-	/**
-	 * Returns the model's minimum.
-	 * 
-	 * @return the model's minimum
-	 * @see #setMinimum
-	 * @see BoundedRangeModel#getMinimum
-	 */
+	public int getLowerValue() {
+		return lowerValue;
+	}
+
+	public int getUpperValue() {
+		return upperValue;
+	}
+
+	public int getLowerExtent() {
+		return lowerExtent;
+	}
+
+	public int getUpperExtent() {
+		return upperExtent;
+	}
+
 	public int getMinimum() {
 		return min;
 	}
 
-	/**
-	 * Returns the model's maximum.
-	 * 
-	 * @return the model's maximum
-	 * @see #setMaximum
-	 * @see BoundedRangeModel#getMaximum
-	 */
 	public int getMaximum() {
 		return max;
 	}
 
-	/**
-	 * Sets the current value of the model. For a slider, that determines where the
-	 * knob appears. Ensures that the new value, <I>n</I> falls within the model's
-	 * constraints:
-	 * 
-	 * <pre>
-	 * minimum &lt;= value &lt;= value + extent &lt;= maximum
-	 * </pre>
-	 *
-	 * @see BoundedRangeModel#setValue
-	 */
-	public void setValue(int n) {
-		n = Math.min(n, Integer.MAX_VALUE - extent);
+	public void setLowerValue(int lowVal) {
+		lowVal = Math.min(lowVal, Integer.MAX_VALUE - lowerExtent);
 
-		int newValue = Math.max(n, min);
-		if (newValue + extent > max) {
-			newValue = max - extent;
+		int newValue = Math.max(lowVal, min);
+		if (newValue + lowerExtent > upperValue) {
+			newValue = upperValue - lowerExtent;
 		}
-		setRangeProperties(newValue, extent, min, max, isAdjusting);
+		setRangeProperties(newValue, lowerExtent, upperValue, upperExtent, min, max, isAdjusting);
 	}
 
-	/**
-	 * Sets the extent to <I>n</I> after ensuring that <I>n</I> is greater than or
-	 * equal to zero and falls within the model's constraints:
-	 * 
-	 * <pre>
-	 * minimum &lt;= value &lt;= value + extent &lt;= maximum
-	 * </pre>
-	 * 
-	 * @see BoundedRangeModel#setExtent
-	 */
-	public void setExtent(int n) {
-		int newExtent = Math.max(0, n);
-		if (value + newExtent > max) {
-			newExtent = max - value;
+	public void setUpperValue(int upVal) {
+		upVal = Math.min(upVal, Integer.MAX_VALUE - upperExtent);
+
+		int newValue = Math.max(upVal, min);
+		if (newValue + upperExtent > max) {
+			newValue = max - upperExtent;
 		}
-		setRangeProperties(value, newExtent, min, max, isAdjusting);
+		setRangeProperties(lowerValue, lowerExtent, newValue, upperExtent, min, max, isAdjusting);
 	}
 
-	/**
-	 * Sets the minimum to <I>n</I> after ensuring that <I>n</I> that the other
-	 * three properties obey the model's constraints:
-	 * 
-	 * <pre>
-	 * minimum &lt;= value &lt;= value + extent &lt;= maximum
-	 * </pre>
-	 * 
-	 * @see #getMinimum
-	 * @see BoundedRangeModel#setMinimum
-	 */
+	public void setLowerExtent(int lowExt) {
+		int newExtent = Math.max(0, lowExt);
+
+		if (lowerValue + newExtent > upperValue) {
+			newExtent = upperValue - lowerValue;
+		}
+		setRangeProperties(lowerValue, newExtent, upperValue, upperExtent, min, max, isAdjusting);
+	}
+
+	public void setUpperExtent(int upExt) {
+		int newExtent = Math.max(0, upExt);
+
+		if (upperValue + newExtent > max) {
+			newExtent = max - upperValue;
+		}
+		setRangeProperties(lowerValue, lowerExtent, upperValue, newExtent, min, max, isAdjusting);
+	}
+
 	public void setMinimum(int n) {
 		int newMax = Math.max(n, max);
-		int newValue = Math.max(n, value);
-		int newExtent = Math.min(newMax - newValue, extent);
-		setRangeProperties(newValue, newExtent, n, newMax, isAdjusting);
+		int newLowerValue = Math.max(n, lowerValue);
+		int newLowerExtent = Math.min(newMax - newLowerValue, lowerExtent);
+		int newUpperValue = Math.max(n, upperValue);
+		int newUpperExtent = Math.min(newMax - newUpperValue, upperExtent);
+		
+		setRangeProperties(newLowerValue, newLowerExtent, newUpperValue, newUpperExtent, n, newMax, isAdjusting);
 	}
 
-	/**
-	 * Sets the maximum to <I>n</I> after ensuring that <I>n</I> that the other
-	 * three properties obey the model's constraints:
-	 * 
-	 * <pre>
-	 * minimum &lt;= value &lt;= value + extent &lt;= maximum
-	 * </pre>
-	 * 
-	 * @see BoundedRangeModel#setMaximum
-	 */
 	public void setMaximum(int n) {
 		int newMin = Math.min(n, min);
-		int newExtent = Math.min(n - newMin, extent);
-		int newValue = Math.min(n - newExtent, value);
-		setRangeProperties(newValue, newExtent, newMin, n, isAdjusting);
+		int newLowerExtent = Math.min(n - newMin, lowerExtent);
+        int newLowerValue = Math.min(n - newLowerExtent, lowerValue);
+        int newUpperExtent = Math.min(n - newLowerValue, upperExtent);
+        int newUpperValue = Math.min(n - newUpperExtent, upperValue);
+		
+		setRangeProperties(newLowerValue, newLowerExtent, newUpperValue, newUpperExtent, newMin, n, isAdjusting);
 	}
 
-	/**
-	 * Sets the <code>valueIsAdjusting</code> property.
-	 *
-	 * @see #getValueIsAdjusting
-	 * @see #setValue
-	 * @see BoundedRangeModel#setValueIsAdjusting
-	 */
 	public void setValueIsAdjusting(boolean b) {
-		setRangeProperties(value, extent, min, max, b);
+		setRangeProperties(lowerValue, lowerExtent, upperValue, upperExtent, min, max, b);
 	}
 
-	/**
-	 * Returns true if the value is in the process of changing as a result of
-	 * actions being taken by the user.
-	 *
-	 * @return the value of the <code>valueIsAdjusting</code> property
-	 * @see #setValue
-	 * @see BoundedRangeModel#getValueIsAdjusting
-	 */
 	public boolean getValueIsAdjusting() {
 		return isAdjusting;
 	}
 
-	/**
-	 * Sets all of the <code>BoundedRangeModel</code> properties after forcing the
-	 * arguments to obey the usual constraints:
-	 * 
-	 * <pre>
-	 * minimum &lt;= value &lt;= value + extent &lt;= maximum
-	 * </pre>
-	 * <p>
-	 * At most, one <code>ChangeEvent</code> is generated.
-	 *
-	 * @see BoundedRangeModel#setRangeProperties
-	 * @see #setValue
-	 * @see #setExtent
-	 * @see #setMinimum
-	 * @see #setMaximum
-	 * @see #setValueIsAdjusting
-	 */
-	public void setRangeProperties(int newValue, int newExtent, int newMin, int newMax, boolean adjusting) {
+	public void setRangeProperties(int newLowerValue, int newLowerExtent, int newUpperValue, int newUpperExtent,
+			int newMin, int newMax, boolean adjusting) {
+		
 		if (newMin > newMax) {
 			newMin = newMax;
 		}
-		if (newValue > newMax) {
-			newMax = newValue;
+		
+		if (newLowerValue > newUpperValue) {
+			newLowerValue = newUpperValue;
 		}
-		if (newValue < newMin) {
-			newMin = newValue;
+		
+		if (newUpperValue > newMax) {
+			newUpperValue = newMax;
+		}
+		
+		if (newLowerValue < newMin) {
+			newMin = newLowerValue;
 		}
 
 		/*
 		 * Convert the addends to long so that extent can be Integer.MAX_VALUE without
 		 * rolling over the sum. A JCK test covers this, see bug 4097718.
 		 */
-		if (((long) newExtent + (long) newValue) > newMax) {
-			newExtent = newMax - newValue;
+		if (((long) newLowerExtent + (long) newLowerValue) > newUpperValue) {
+			newLowerExtent = newUpperValue - newLowerValue;
+		}
+		if (((long) newUpperExtent + (long) newUpperValue) > newMax) {
+			newUpperExtent = newMax - newUpperExtent;
 		}
 
-		if (newExtent < 0) {
-			newExtent = 0;
+		if (newLowerExtent < 0) {
+			newLowerExtent = 0;
+		}
+		if (newUpperExtent < 0) {
+			newUpperExtent = 0;
 		}
 
-		boolean isChange = (newValue != value) || (newExtent != extent) || (newMin != min) || (newMax != max)
-				|| (adjusting != isAdjusting);
-
-		if (isChange) {
-			value = newValue;
-			extent = newExtent;
-			min = newMin;
-			max = newMax;
-			isAdjusting = adjusting;
-
-			fireStateChanged();
-		}
+//		boolean isChange = (newValue != value) || (newExtent != extent) || (newMin != min) || (newMax != max)
+//				|| (adjusting != isAdjusting);
+//
+//		if (isChange) {
+//			value = newValue;
+//			extent = newExtent;
+//			min = newMin;
+//			max = newMax;
+//			isAdjusting = adjusting;
+//
+//			fireStateChanged();
+//		}
 	}
 
 	/**
