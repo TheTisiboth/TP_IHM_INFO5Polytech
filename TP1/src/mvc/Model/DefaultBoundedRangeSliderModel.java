@@ -51,7 +51,7 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		// TODO Auto-generated constructor stub
 	}
 
-	public DefaultBoundedRangeSliderModel(int lowVal, int upVal, int lowExt, int upExt, int min, int max) {
+	public DefaultBoundedRangeSliderModel(int lowVal, int lowExt, int upVal, int upExt, int min, int max) {
 
 		if ((min <= lowVal && lowVal <= lowVal + lowExt && lowVal + lowExt <= upVal && upVal <= upVal + upExt
 				&& upVal + upExt <= max)) {

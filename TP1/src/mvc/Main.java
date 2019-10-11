@@ -1,30 +1,28 @@
 package mvc;
 
-import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import java.awt.Dimension;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+
+import mvc.Model.RangeSlider;
 
 public class Main {
 
 	public static void main(String[] args) {
-		JSlider slider = new JSlider();
-        slider.addChangeListener(new ChangeListener() {
-
-         public void stateChanged(ChangeEvent e) {
-
-            // the source will be 
-
-            // the slider this time..
-
-            JSlider s = (JSlider)e.getSource();
-
-            System.out.println("value changed: " +
-
-               s.getValue());
-
-         }
-        });
-
+		JFrame window = new JFrame("TP1 - Range Slider");
+		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		
+		JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(500,500));
+		window.add(panel);
+		
+		RangeSlider slider = new RangeSlider(0, 300, 100, 250);
+		panel.add(slider);
+		
+		window.pack();
+		window.setVisible(true);
 	}
 
 }

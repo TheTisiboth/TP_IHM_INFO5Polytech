@@ -2,6 +2,7 @@ package mvc.Model;
 
 import javax.swing.BoundedRangeModel;
 import javax.swing.JSlider;
+import javax.swing.SwingConstants;
 
 import mvc.View.RangeSliderUI;
 
@@ -10,7 +11,11 @@ public class RangeSlider extends JSlider {
 	
     public static String ACCESSIBLE_UPPER_VALUE_PROPERTY = "AccessibleUpperValue";
 	
-	public RangeSlider(int min, int max, int lowVal, int lowExt, int upVal, int upExt) {
+	public RangeSlider(int min, int max, int lowVal, int upVal) {
+        this.orientation = SwingConstants.HORIZONTAL;
+
+		if (getModel().getClass() != DefaultBoundedRangeSliderModel.class)
+            return;
 		setModel((BoundedRangeModel) new DefaultBoundedRangeSliderModel(lowVal, 0, upVal, 0, min, max));
 		updateUI();
 	}
@@ -22,6 +27,8 @@ public class RangeSlider extends JSlider {
 	}
 	
 	public int getUpperValue() {
+		if (getModel().getClass() != DefaultBoundedRangeSliderModel.class)
+            return 0;
 		return (((BoundedRangeSliderModel) getModel()).getUpperValue());
 	}
 	
