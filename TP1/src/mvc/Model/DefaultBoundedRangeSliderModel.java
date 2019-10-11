@@ -28,7 +28,6 @@ package mvc.Model;
 import java.io.Serializable;
 import java.util.EventListener;
 
-import javax.swing.BoundedRangeModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
@@ -52,20 +51,6 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * Initializes value, extent, minimum and maximum. Adjusting is false. Throws an
-	 * <code>IllegalArgumentException</code> if the following constraints aren't
-	 * satisfied:
-	 * 
-	 * <pre>
-	 * min &lt;= value &lt;= value + extent &lt;= max
-	 * </pre>
-	 *
-	 * @param value  an int giving the current value
-	 * @param extent the length of the inner range that begins at the model's value
-	 * @param min    an int giving the minimum value
-	 * @param max    an int giving the maximum value
-	 */
 	public DefaultBoundedRangeSliderModel(int lowVal, int upVal, int lowExt, int upExt, int min, int max) {
 
 		if ((min <= lowVal && lowVal <= lowVal + lowExt && lowVal + lowExt <= upVal && upVal <= upVal + upExt
@@ -149,17 +134,17 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		int newLowerExtent = Math.min(newMax - newLowerValue, lowerExtent);
 		int newUpperValue = Math.max(n, upperValue);
 		int newUpperExtent = Math.min(newMax - newUpperValue, upperExtent);
-		
+
 		setRangeProperties(newLowerValue, newLowerExtent, newUpperValue, newUpperExtent, n, newMax, isAdjusting);
 	}
 
 	public void setMaximum(int n) {
 		int newMin = Math.min(n, min);
 		int newLowerExtent = Math.min(n - newMin, lowerExtent);
-        int newLowerValue = Math.min(n - newLowerExtent, lowerValue);
-        int newUpperExtent = Math.min(n - newLowerValue, upperExtent);
-        int newUpperValue = Math.min(n - newUpperExtent, upperValue);
-		
+		int newLowerValue = Math.min(n - newLowerExtent, lowerValue);
+		int newUpperExtent = Math.min(n - newLowerValue, upperExtent);
+		int newUpperValue = Math.min(n - newUpperExtent, upperValue);
+
 		setRangeProperties(newLowerValue, newLowerExtent, newUpperValue, newUpperExtent, newMin, n, isAdjusting);
 	}
 
@@ -173,19 +158,19 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 
 	public void setRangeProperties(int newLowerValue, int newLowerExtent, int newUpperValue, int newUpperExtent,
 			int newMin, int newMax, boolean adjusting) {
-		
+
 		if (newMin > newMax) {
 			newMin = newMax;
 		}
-		
+
 		if (newLowerValue > newUpperValue) {
 			newLowerValue = newUpperValue;
 		}
-		
+
 		if (newUpperValue > newMax) {
 			newUpperValue = newMax;
 		}
-		
+
 		if (newLowerValue < newMin) {
 			newMin = newLowerValue;
 		}
@@ -208,65 +193,35 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 			newUpperExtent = 0;
 		}
 
-//		boolean isChange = (newValue != value) || (newExtent != extent) || (newMin != min) || (newMax != max)
-//				|| (adjusting != isAdjusting);
-//
-//		if (isChange) {
-//			value = newValue;
-//			extent = newExtent;
-//			min = newMin;
-//			max = newMax;
-//			isAdjusting = adjusting;
-//
-//			fireStateChanged();
-//		}
+		boolean isChange = (newLowerValue != lowerValue) || (newLowerExtent != lowerExtent)
+				|| (newUpperValue != upperValue) || (newUpperExtent != upperExtent) || (newMin != min)
+				|| (newMax != max) || (adjusting != isAdjusting);
+
+		if (isChange) {
+			lowerValue = newLowerValue;
+			lowerExtent = newLowerExtent;
+			upperValue = newUpperValue;
+			upperExtent = newUpperExtent;
+			min = newMin;
+			max = newMax;
+			isAdjusting = adjusting;
+
+			fireStateChanged();
+		}
 	}
 
-	/**
-	 * Adds a <code>ChangeListener</code>. The change listeners are run each time
-	 * any one of the Bounded Range model properties changes.
-	 *
-	 * @param l the ChangeListener to add
-	 * @see #removeChangeListener
-	 * @see BoundedRangeModel#addChangeListener
-	 */
 	public void addChangeListener(ChangeListener l) {
 		listenerList.add(ChangeListener.class, l);
 	}
 
-	/**
-	 * Removes a <code>ChangeListener</code>.
-	 *
-	 * @param l the <code>ChangeListener</code> to remove
-	 * @see #addChangeListener
-	 * @see BoundedRangeModel#removeChangeListener
-	 */
 	public void removeChangeListener(ChangeListener l) {
 		listenerList.remove(ChangeListener.class, l);
 	}
 
-	/**
-	 * Returns an array of all the change listeners registered on this
-	 * <code>DefaultBoundedRangeModel</code>.
-	 *
-	 * @return all of this model's <code>ChangeListener</code>s or an empty array if
-	 *         no change listeners are currently registered
-	 *
-	 * @see #addChangeListener
-	 * @see #removeChangeListener
-	 *
-	 * @since 1.4
-	 */
 	public ChangeListener[] getChangeListeners() {
 		return listenerList.getListeners(ChangeListener.class);
 	}
 
-	/**
-	 * Runs each <code>ChangeListener</code>'s <code>stateChanged</code> method.
-	 *
-	 * @see #setRangeProperties
-	 * @see EventListenerList
-	 */
 	protected void fireStateChanged() {
 		Object[] listeners = listenerList.getListenerList();
 		for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -280,12 +235,13 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 	}
 
 	/**
-	 * Returns a string that displays all of the <code>BoundedRangeModel</code>
+	 * Returns a string that displays all of the <code>BoundedRangeSliderModel</code>
 	 * properties.
 	 */
 	public String toString() {
-		String modelString = "value=" + getValue() + ", " + "extent=" + getExtent() + ", " + "min=" + getMinimum()
-				+ ", " + "max=" + getMaximum() + ", " + "adj=" + getValueIsAdjusting();
+		String modelString = "lowerValue=" + getLowerValue() + ", " + "lowerExtent=" + getLowerExtent() + ", "
+				+ "upperValue=" + getUpperValue() + ", " + "upperExtent=" + getUpperExtent() + ", " + "min="
+				+ getMinimum() + ", " + "max=" + getMaximum() + ", " + "adj=" + getValueIsAdjusting();
 
 		return getClass().getName() + "[" + modelString + "]";
 	}

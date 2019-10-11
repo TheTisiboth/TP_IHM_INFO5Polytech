@@ -1,13 +1,9 @@
 package mvc;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.util.Dictionary;
-import java.util.Hashtable;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,7 +27,9 @@ public class test {
 /**
  * A frame with many sliders and a text field to show slider values.
  */
+@SuppressWarnings("serial")
 class SliderTestFrame extends JFrame {
+
 	public SliderTestFrame() {
 		setTitle("SliderTest");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -52,8 +50,6 @@ class SliderTestFrame extends JFrame {
 
 		JSlider slider = new JSlider();
 		addSlider(slider, "Plain");
-
-
 
 		// add the text field that displays the slider value
 
