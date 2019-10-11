@@ -39,16 +39,21 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 
 	protected EventListenerList listenerList = new EventListenerList();
 
-	private int lowerValue = 0;
-	private int upperValue = 0;
-	private int lowerExtent = 0;
-	private int upperExtent = 0;
-	private int min = 0;
-	private int max = 100;
+	private int lowerValue;
+	private int upperValue;
+	private int lowerExtent;
+	private int upperExtent;
+	private int min;
+	private int max;
 	private boolean isAdjusting = false;
 
 	public DefaultBoundedRangeSliderModel() {
-		// TODO Auto-generated constructor stub
+		lowerValue = 0;
+		min = 0;
+		lowerExtent = 0;
+		upperValue = 100;
+		upperExtent = 0;
+		max = 100;
 	}
 
 	public DefaultBoundedRangeSliderModel(int lowVal, int lowExt, int upVal, int upExt, int min, int max) {
@@ -156,6 +161,7 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		return isAdjusting;
 	}
 
+	@Override
 	public void setRangeProperties(int newLowerValue, int newLowerExtent, int newUpperValue, int newUpperExtent,
 			int newMin, int newMax, boolean adjusting) {
 
@@ -164,11 +170,11 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		}
 
 		if (newLowerValue > newUpperValue) {
-			newLowerValue = newUpperValue;
+			newUpperValue = newLowerValue; // Pas sur
 		}
 
 		if (newUpperValue > newMax) {
-			newUpperValue = newMax;
+			newMax = newUpperValue; // Pas sur
 		}
 
 		if (newLowerValue < newMin) {
@@ -235,8 +241,8 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 	}
 
 	/**
-	 * Returns a string that displays all of the <code>BoundedRangeSliderModel</code>
-	 * properties.
+	 * Returns a string that displays all of the
+	 * <code>BoundedRangeSliderModel</code> properties.
 	 */
 	public String toString() {
 		String modelString = "lowerValue=" + getLowerValue() + ", " + "lowerExtent=" + getLowerExtent() + ", "
@@ -246,39 +252,37 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		return getClass().getName() + "[" + modelString + "]";
 	}
 
-	/**
-	 * Returns an array of all the objects currently registered as
-	 * <code><em>Foo</em>Listener</code>s upon this model.
-	 * <code><em>Foo</em>Listener</code>s are registered using the
-	 * <code>add<em>Foo</em>Listener</code> method.
-	 * <p>
-	 * You can specify the <code>listenerType</code> argument with a class literal,
-	 * such as <code><em>Foo</em>Listener.class</code>. For example, you can query a
-	 * <code>DefaultBoundedRangeModel</code> instance <code>m</code> for its change
-	 * listeners with the following code:
-	 *
-	 * <pre>
-	 * ChangeListener[] cls = (ChangeListener[]) (m.getListeners(ChangeListener.class));
-	 * </pre>
-	 *
-	 * If no such listeners exist, this method returns an empty array.
-	 *
-	 * @param <T>          the type of {@code EventListener} class being requested
-	 * @param listenerType the type of listeners requested; this parameter should
-	 *                     specify an interface that descends from
-	 *                     <code>java.util.EventListener</code>
-	 * @return an array of all objects registered as
-	 *         <code><em>Foo</em>Listener</code>s on this model, or an empty array
-	 *         if no such listeners have been added
-	 * @exception ClassCastException if <code>listenerType</code> doesn't specify a
-	 *                               class or interface that implements
-	 *                               <code>java.util.EventListener</code>
-	 *
-	 * @see #getChangeListeners
-	 *
-	 * @since 1.3
-	 */
+
 	public <T extends EventListener> T[] getListeners(Class<T> listenerType) {
 		return listenerList.getListeners(listenerType);
 	}
+
+	@Override
+	public int getValue() {
+		return getLowerValue();
+	}
+
+	@Override
+	public void setValue(int newValue) {
+		setLowerValue(newValue);
+		
+	}
+
+	@Override
+	public int getExtent() {
+		return getLowerExtent();
+	}
+
+	@Override
+	public void setExtent(int newExtent) {
+		setLowerExtent(newExtent);
+	}
+
+	@Override
+	public void setRangeProperties(int value, int extent, int min, int max, boolean adjusting) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }

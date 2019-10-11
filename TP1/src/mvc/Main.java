@@ -18,7 +18,7 @@ public class Main {
 		panel.setPreferredSize(new Dimension(500,500));
 		window.add(panel);
 		
-		RangeSlider slider = new RangeSlider(0, 300, 100, 250);
+		RangeSlider slider = new RangeSlider();
 		panel.add(slider);
 		
 		window.pack();

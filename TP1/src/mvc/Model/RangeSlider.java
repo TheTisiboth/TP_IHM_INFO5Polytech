@@ -6,6 +6,7 @@ import javax.swing.SwingConstants;
 
 import mvc.View.RangeSliderUI;
 
+
 @SuppressWarnings("serial")
 public class RangeSlider extends JSlider {
 	
@@ -17,6 +18,15 @@ public class RangeSlider extends JSlider {
 		if (getModel().getClass() != DefaultBoundedRangeSliderModel.class)
             return;
 		setModel((BoundedRangeModel) new DefaultBoundedRangeSliderModel(lowVal, 0, upVal, 0, min, max));
+		updateUI();
+	}
+	
+	public RangeSlider() {
+        this.orientation = SwingConstants.HORIZONTAL;
+
+		if (getModel().getClass() != DefaultBoundedRangeSliderModel.class)
+            return;
+		setModel((BoundedRangeModel) new DefaultBoundedRangeSliderModel());
 		updateUI();
 	}
 	

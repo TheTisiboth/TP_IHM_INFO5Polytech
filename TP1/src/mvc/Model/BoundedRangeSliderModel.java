@@ -2,9 +2,10 @@ package mvc.Model;
 
 import java.util.EventListener;
 
+import javax.swing.BoundedRangeModel;
 import javax.swing.event.ChangeListener;
 
-public interface BoundedRangeSliderModel {
+public interface BoundedRangeSliderModel extends BoundedRangeModel {
 	public int getLowerValue();
 
 	public int getUpperValue();
