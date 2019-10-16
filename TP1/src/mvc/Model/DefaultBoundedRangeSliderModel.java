@@ -1,28 +1,3 @@
-/*
- * Copyright (c) 1997, 2014, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
 package mvc.Model;
 
 import java.io.Serializable;
@@ -58,8 +33,9 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 
 	public DefaultBoundedRangeSliderModel(int lowVal, int lowExt, int upVal, int upExt, int min, int max) {
 
-		if ((min <= lowVal && lowVal <= lowVal + lowExt && lowVal + lowExt <= upVal && upVal <= upVal + upExt
-				&& upVal + upExt <= max)) {
+		if (max >= min && lowerValue >= min && lowerValue + lowerExtent >= lowerValue
+				&& lowerValue + lowerExtent <= upperValue && upperValue + lowerExtent >= upperValue
+				&& upperValue + upperExtent <= max) {
 			this.lowerValue = lowVal;
 			this.upperValue = upVal;
 			this.lowerExtent = lowExt;
@@ -136,8 +112,8 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 	public void setMinimum(int n) {
 		int newMax = Math.max(n, max);
 		int newLowerValue = Math.max(n, lowerValue);
-		int newLowerExtent = Math.min(newMax - newLowerValue, lowerExtent);
 		int newUpperValue = Math.max(n, upperValue);
+		int newLowerExtent = Math.min(newUpperValue - newLowerValue, lowerExtent);
 		int newUpperExtent = Math.min(newMax - newUpperValue, upperExtent);
 
 		setRangeProperties(newLowerValue, newLowerExtent, newUpperValue, newUpperExtent, n, newMax, isAdjusting);
@@ -165,43 +141,27 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 	public void setRangeProperties(int newLowerValue, int newLowerExtent, int newUpperValue, int newUpperExtent,
 			int newMin, int newMax, boolean adjusting) {
 
-		if (newMin > newMax) {
+		if (newMin > newMax)
 			newMin = newMax;
-		}
-
-		if (newLowerValue > newUpperValue) {
-			newUpperValue = newLowerValue; // Pas sur
-		}
-
-		if (newUpperValue > newMax) {
-			newMax = newUpperValue; // Pas sur
-		}
-
-		if (newLowerValue < newMin) {
+		if (newLowerValue > newUpperValue)
+			newUpperValue = newLowerValue;
+		if (newUpperValue > newMax)
+			newMax = newUpperValue;
+		if (newLowerValue < newMin)
 			newMin = newLowerValue;
-		}
 
-		/*
-		 * Convert the addends to long so that extent can be Integer.MAX_VALUE without
-		 * rolling over the sum. A JCK test covers this, see bug 4097718.
-		 */
-		if (((long) newLowerExtent + (long) newLowerValue) > newUpperValue) {
+		if ((long) newLowerExtent + (long) newLowerValue > newUpperValue)
 			newLowerExtent = newUpperValue - newLowerValue;
-		}
-		if (((long) newUpperExtent + (long) newUpperValue) > newMax) {
-			newUpperExtent = newMax - newUpperExtent;
-		}
+		if ((long) newUpperExtent + (long) newUpperValue > newMax)
+			newUpperExtent = newMax - newUpperValue;
 
-		if (newLowerExtent < 0) {
+		if (newLowerExtent < 0)
 			newLowerExtent = 0;
-		}
-		if (newUpperExtent < 0) {
+		if (newUpperExtent < 0)
 			newUpperExtent = 0;
-		}
 
-		boolean isChange = (newLowerValue != lowerValue) || (newLowerExtent != lowerExtent)
-				|| (newUpperValue != upperValue) || (newUpperExtent != upperExtent) || (newMin != min)
-				|| (newMax != max) || (adjusting != isAdjusting);
+		boolean isChange = newLowerValue != lowerValue || newLowerExtent != lowerExtent || newUpperValue != upperValue
+				|| newUpperExtent != upperExtent || newMin != min || newMax != max || adjusting != isAdjusting;
 
 		if (isChange) {
 			lowerValue = newLowerValue;
@@ -252,7 +212,6 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		return getClass().getName() + "[" + modelString + "]";
 	}
 
-
 	public <T extends EventListener> T[] getListeners(Class<T> listenerType) {
 		return listenerList.getListeners(listenerType);
 	}
@@ -265,7 +224,7 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 	@Override
 	public void setValue(int newValue) {
 		setLowerValue(newValue);
-		
+
 	}
 
 	@Override
@@ -281,8 +240,7 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 	@Override
 	public void setRangeProperties(int value, int extent, int min, int max, boolean adjusting) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 }

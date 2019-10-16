@@ -15,7 +15,7 @@ import javax.swing.plaf.basic.BasicSliderUI;
 import mvc.Model.RangeSlider;
 
 public class RangeSliderUI extends BasicSliderUI {
-	private Rectangle secondThumbRect;
+	private Rectangle upperThumb;
 	private Rectangle unionRect;
 
 	public RangeSliderUI(JSlider slider) {
@@ -28,14 +28,14 @@ public class RangeSliderUI extends BasicSliderUI {
 
 	@Override
 	public void installUI(JComponent c) {
-		secondThumbRect = new Rectangle();
+		upperThumb = new Rectangle();
 		unionRect = new Rectangle();
 		super.installUI(c);
 	}
 
 	@Override
 	public void uninstallUI(JComponent c) {
-		secondThumbRect = null;
+		upperThumb = null;
 		unionRect = null;
 
 		super.uninstallUI(c);
@@ -47,9 +47,9 @@ public class RangeSliderUI extends BasicSliderUI {
 
 	@Override
 	protected void calculateThumbSize() {
-		super.calculateThumbSize();
-		secondThumbRect.setSize(getThumbSize());
+		// super.calculateThumbSize();
 		thumbRect.setSize(getThumbSize());
+		upperThumb.setSize(getThumbSize());
 	}
 
 	@Override
@@ -57,8 +57,8 @@ public class RangeSliderUI extends BasicSliderUI {
 		super.calculateThumbLocation();
 
 		int pos = xPositionForValue(((RangeSlider) slider).getUpperValue());
-		secondThumbRect.x = pos - secondThumbRect.width / 2;
-		secondThumbRect.y = trackRect.y;
+		upperThumb.x = pos - upperThumb.width / 2;
+		upperThumb.y = trackRect.y;
 	}
 
 	@Override
@@ -67,18 +67,18 @@ public class RangeSliderUI extends BasicSliderUI {
 
 		Rectangle clip = g.getClipBounds();
 
-		if (clip.intersects(secondThumbRect))
+		if (clip.intersects(upperThumb))
 			paintThumb(g);
 	}
 
 	@Override
 	public void paintThumb(Graphics g) {
-		super.paintThumb(g);
+		// super.paintThumb(g);
 
 		Rectangle knobBounds = thumbRect;
 		subPaintThumb(g, knobBounds);
 
-		knobBounds = secondThumbRect;
+		knobBounds = upperThumb;
 		subPaintThumb(g, knobBounds);
 	}
 
@@ -110,13 +110,12 @@ public class RangeSliderUI extends BasicSliderUI {
 		g.translate(-knobBounds.x, -knobBounds.y);
 	}
 
-	public void setSecondThumbLocation(int x, int y) {
-		unionRect.setBounds(secondThumbRect);
+	public void setUpperThumbLocation(int x, int y) {
+		unionRect.setBounds(upperThumb);
 
-		secondThumbRect.setLocation(x, y);
+		upperThumb.setLocation(x, y);
 
-		SwingUtilities.computeUnion(secondThumbRect.x, secondThumbRect.y, secondThumbRect.width, secondThumbRect.height,
-				unionRect);
+		SwingUtilities.computeUnion(upperThumb.x, upperThumb.y, upperThumb.width, upperThumb.height, unionRect);
 		slider.repaint(unionRect.x, unionRect.y, unionRect.width, unionRect.height);
 	}
 
@@ -170,11 +169,11 @@ public class RangeSliderUI extends BasicSliderUI {
 				return;
 			}
 
-			if (secondThumbRect.contains(currentMouseX, currentMouseY)) {
+			if (upperThumb.contains(currentMouseX, currentMouseY)) {
 				if (UIManager.getBoolean("Slider.onlyLeftMouseButtonDrag") && !SwingUtilities.isLeftMouseButton(e))
 					return;
 
-				offset = currentMouseX - secondThumbRect.x;
+				offset = currentMouseX - upperThumb.x;
 				lowerDrag = false;
 				upperDrag = true;
 
@@ -212,7 +211,7 @@ public class RangeSliderUI extends BasicSliderUI {
 				else
 					trackRight = hMax;
 				thumbLeft = Math.max(thumbLeft, trackLeft - halfThumbWidth);
-				thumbLeft = Math.min(thumbLeft, trackRight - halfThumbWidth); // ca n'a pas de sens
+				thumbLeft = Math.min(thumbLeft, trackRight - halfThumbWidth);
 
 				thumbsMid = thumbLeft + halfThumbWidth;
 				int thumbRight = thumbLeft + thumbRect.width;
@@ -226,7 +225,7 @@ public class RangeSliderUI extends BasicSliderUI {
 			if (upperDrag) {
 				slider.setValueIsAdjusting(true);
 
-				int halfThumbWidth = secondThumbRect.width / 2;
+				int halfThumbWidth = upperThumb.width / 2;
 				int thumbLeft = e.getX() - offset;
 				int trackLeft = trackRect.x;
 				int trackRight = trackRect.x + trackRect.width - 1;
@@ -237,12 +236,12 @@ public class RangeSliderUI extends BasicSliderUI {
 				else
 					trackRight = hMax;
 				thumbLeft = Math.max(thumbLeft, trackLeft - halfThumbWidth);
-				thumbLeft = Math.min(thumbLeft, trackRight - halfThumbWidth); // ca n'a pas de sens
+				thumbLeft = Math.min(thumbLeft, trackRight - halfThumbWidth);
 
 				thumbsMid = thumbLeft + halfThumbWidth;
 
 				if (valueForXPosition(thumbLeft) > slider.getValue()) {
-					setSecondThumbLocation(thumbLeft, secondThumbRect.y);
+					setUpperThumbLocation(thumbLeft, upperThumb.y);
 					((RangeSlider) slider).setUpperValue(valueForXPosition(thumbsMid));
 				}
 			}
