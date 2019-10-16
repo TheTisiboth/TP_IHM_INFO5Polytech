@@ -41,7 +41,8 @@ public class RangeSliderUI extends BasicSliderUI {
 		super.uninstallUI(c);
 	}
 
-	protected RangeTrackListener createRangeTrackListener() {
+	@Override
+	protected TrackListener createTrackListener(JSlider s) {
 		return new RangeTrackListener();
 	}
 
