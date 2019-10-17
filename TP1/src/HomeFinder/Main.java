@@ -2,15 +2,14 @@ package HomeFinder;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -33,11 +32,15 @@ class SliderTestFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private ChangeListener listenerRoom;
 	private ChangeListener listenerPrice;
-	private JTextField tfRooms;
-	private JTextField tfPrice;
+	private JLabel lowPrice = new JLabel();
+	private JLabel upPrice = new JLabel();
+	private JLabel lowRoom = new JLabel();
+	private JLabel upRoom = new JLabel();
 	JPanel centerPanel;
 	JPanel rightPanel;
-
+	RangeSlider roomSlider;
+	RangeSlider priceSlider;
+	
 	public SliderTestFrame() {
 		setTitle("TP1 - Home Finder");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,7 +50,8 @@ class SliderTestFrame extends JFrame {
 			public void stateChanged(ChangeEvent event) {
 				// update text field when the slider value changes
 				RangeSlider source = (RangeSlider) event.getSource();
-				tfRooms.setText("" + source.getValue() + " <->" + source.getUpperValue());
+				lowRoom.setText("Low: " + source.getValue());
+				upRoom.setText("Up: " + source.getUpperValue());
 			}
 		};
 
@@ -55,77 +59,63 @@ class SliderTestFrame extends JFrame {
 			public void stateChanged(ChangeEvent event) {
 				// update text field when the slider value changes
 				RangeSlider source = (RangeSlider) event.getSource();
-				tfPrice.setText("" + source.getValue() + " <->" + source.getUpperValue());
+				lowPrice.setText("Low: " + source.getValue());
+				upPrice.setText("Up: " + source.getUpperValue());
 			}
 		};
 
 		centerPanel = new JPanel();
 		centerPanel.setPreferredSize(new Dimension(400, 400));
-
-		tfRooms = new JTextField();
-		tfRooms.setColumns(2);
-		tfRooms.setPreferredSize(new Dimension(20, 20));
-		tfPrice = new JTextField();
-		RangeSlider roomSlider = new RangeSlider();
-		addSliderPrice(roomSlider, "Room Slider");
-		RangeSlider priceSlider = new RangeSlider();
-		addSliderRoom(priceSlider, "Price Slider");
-
-		rightPanel = new JPanel();
-		rightPanel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(10, 0, 0, 0);
-		c.weightx = 0;
-		c.weighty = 0;
-		c.gridx = 0;
-		c.gridy = 0;
-		rightPanel.add(roomSlider, c);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(10, 0, 0, 0); // Top padding
-		c.weightx = 0;
-		c.weighty = 0;
-		c.ipadx = 50;
-		c.gridx = 0;
-		c.gridy = 1;
-		rightPanel.add(tfPrice, c);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(30, 0, 0, 0); // Top padding
-		c.ipadx = 0;
-		c.gridx = 0;
-		c.gridy = 2;
-		rightPanel.add(priceSlider, c);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(10, 0, 0, 0); // Top padding
-		c.weightx = 0.1;
-		c.weighty = 0.1;
-		c.gridx = 0;
-		c.gridy = 4;
-		c.gridwidth = 1;
-		c.gridheight = 10;
-		rightPanel.add(tfRooms, c);
-
-		getContentPane().add(rightPanel, BorderLayout.EAST);
+		
+		// PRICE SLIDER PART
+		priceSlider = new RangeSlider(0, 1000, 0, 1000);
+		priceSlider.addChangeListener(listenerPrice);
+					
+		JPanel priceMinMaxPane = new JPanel(new BorderLayout());		
+		priceMinMaxPane.add(new JLabel(""+priceSlider.getMinimum()), BorderLayout.WEST);
+		priceMinMaxPane.add(new JLabel(""+priceSlider.getMaximum()), BorderLayout.EAST);
+		priceMinMaxPane.add(new JLabel("Price", SwingConstants.CENTER), BorderLayout.CENTER);
+		
+		JPanel priceLowUpPane = new JPanel(new BorderLayout());	
+		lowPrice.setText("Low: " + priceSlider.getValue());
+		priceLowUpPane.add(lowPrice, BorderLayout.WEST);
+		upPrice.setText("Up: " + priceSlider.getUpperValue());
+		priceLowUpPane.add(upPrice, BorderLayout.EAST);
+		
+		JPanel pricePane = new JPanel(new BorderLayout());
+		pricePane.add(priceMinMaxPane, BorderLayout.NORTH);
+		pricePane.add(priceSlider, BorderLayout.CENTER);
+		pricePane.add(priceLowUpPane, BorderLayout.SOUTH);
+		
+		// ROOM SLIDER PART
+		roomSlider = new RangeSlider(0, 15, 0, 15);
+		roomSlider.addChangeListener(listenerRoom);
+		
+		JPanel roomMinMaxPane = new JPanel(new BorderLayout());		
+		roomMinMaxPane.add(new JLabel(""+roomSlider.getMinimum()), BorderLayout.WEST);
+		roomMinMaxPane.add(new JLabel(""+roomSlider.getMaximum()), BorderLayout.EAST);
+		roomMinMaxPane.add(new JLabel("Room", SwingConstants.CENTER), BorderLayout.CENTER);
+		
+		JPanel roomLowUpPane = new JPanel(new BorderLayout());	
+		lowRoom.setText("Low: " + roomSlider.getValue());
+		roomLowUpPane.add(lowRoom, BorderLayout.WEST);
+		upRoom.setText("Up: " + roomSlider.getUpperValue());
+		roomLowUpPane.add(upRoom, BorderLayout.EAST);
+		
+		JPanel roomPane = new JPanel(new BorderLayout());
+		roomPane.add(roomMinMaxPane, BorderLayout.NORTH);
+		roomPane.add(roomSlider, BorderLayout.CENTER);
+		roomPane.add(roomLowUpPane, BorderLayout.SOUTH);
+		
+		// APP PART
+		JPanel sliders = new JPanel(new BorderLayout());
+		sliders.add(pricePane, BorderLayout.NORTH);
+		sliders.add(roomPane, BorderLayout.SOUTH);
+		
+		getContentPane().add(sliders, BorderLayout.EAST);
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
 		pack();
 		setVisible(true);
 
-	}
-
-	public void addSliderPrice(JSlider s, String description) {
-		s.addChangeListener(listenerPrice);
-		JPanel panel = new JPanel();
-		panel.add(s);
-		panel.add(new JLabel(description));
-		getContentPane().add(panel);
-	}
-
-	public void addSliderRoom(JSlider s, String description) {
-		s.addChangeListener(listenerRoom);
-		JPanel panel = new JPanel();
-		panel.add(s);
-		panel.add(new JLabel(description));
-		getContentPane().add(panel);
 	}
 }
