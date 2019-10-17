@@ -16,6 +16,13 @@ public class RangeSlider extends JSlider {
 		setModel(new DefaultBoundedRangeSliderModel(lowVal, 0, upVal, 0, min, max));
 		updateUI();
 	}
+	
+	public RangeSlider(int min, int max) {
+		this.orientation = SwingConstants.HORIZONTAL;
+
+		setModel(new DefaultBoundedRangeSliderModel(min, 0, max, 0, min, max));
+		updateUI();
+	}
 
 	public RangeSlider() {
 		this.orientation = SwingConstants.HORIZONTAL;

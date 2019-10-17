@@ -33,9 +33,9 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 
 	public DefaultBoundedRangeSliderModel(int lowVal, int lowExt, int upVal, int upExt, int min, int max) {
 
-		if (max >= min && lowerValue >= min && lowerValue + lowerExtent >= lowerValue
-				&& lowerValue + lowerExtent <= upperValue && upperValue + lowerExtent >= upperValue
-				&& upperValue + upperExtent <= max) {
+		if (max >= min && lowVal >= min && lowVal + lowExt >= lowVal
+				&& lowVal + lowExt <= upVal && upVal + lowExt >= upVal
+				&& upVal + upExt <= max) {
 			this.lowerValue = lowVal;
 			this.upperValue = upVal;
 			this.lowerExtent = lowExt;
