@@ -31,12 +31,14 @@ Nous avons réalisé un RangeSlider, basé sur le JSlider de java swing.
 Il implémente les fonctionnalités suivantes :   
 * Déplacement lors d'un clic gauche enfoncé/déplacement de la souris/clic gauche relaché de l'un des 2 curseurs, suivant sur lequel on clique.    
 * Déplacement de l'un des 2 curseurs, lorsque l'on clique sur la barre horizontale sur laquelle ils évoluent. Les regles de déplacmeents sont décrites dans la Question 2.    
-* Le déplacement du 1er curseur est controlable par le clavier. Pas pour le deuxième.    
+* Le déplacement du 1er curseur est controlable par le clavier. Pas pour le deuxième.  
+
 En résumé, le RangeSlider est completement fonctionnel.   
 
 De plus, nous avons réalisé le HomeFinder, qui implémente les fonctionnalités suivantes:   
 * Générations et affichage de maisons aléatoire     
 * Filtre dynamique à l'aide des RangeSliders.    
+
 En résumé, le HomeFinder est completement fonctionnel.  
 
 
@@ -44,6 +46,7 @@ En résumé, le HomeFinder est completement fonctionnel.
 Nous avons repris la structure du JSlider, à savoir une structure suivant le l'architecture MVC:   
 * L'implémentation du modèle est faite dans DefaultBoundedRangeSliderModel.      
 * Dans RangeSliderUI, il y a tout d'abord la Vue, à savoir la partie graphique du slider. De plus, comme vue et controller sont tres liées, nous avons laissé le controlleur dans cette classe.     
+
 Pour instancier notre widget, il faut instancier l'objet RangeSlider.   
    
 Le fichier Main dans le package HomeFinder permet de lancer le programme HomeFinder.  
