@@ -2,6 +2,11 @@ package HomeFinder;
 
 import java.awt.Color;
 
+/**
+ * Representation of a Home, with its coordinates, price, number of rooms and color
+ * @author Eva Leo Xavier
+ *
+ */
 public class Home {
 	private int x;
 	private int y;

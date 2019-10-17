@@ -8,20 +8,29 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
 @SuppressWarnings("serial") // Same-version serialization only
+/**
+ * Implementation of the BoundedRangeSliderModel, that is the Model of the Range Slider
+ * 
+ * @author Eva Leo Xavier
+ *
+ */
 public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, Serializable {
 
 	protected transient ChangeEvent changeEvent = null;
 
 	protected EventListenerList listenerList = new EventListenerList();
 
-	private int lowerValue;
-	private int upperValue;
+	private int lowerValue; // Value of the first cursor
+	private int upperValue; // Value of the second cursor, and so one
 	private int lowerExtent;
 	private int upperExtent;
 	private int min;
 	private int max;
 	private boolean isAdjusting = false;
 
+	/**
+	 * Initializes all of the properties with default values.
+	 */
 	public DefaultBoundedRangeSliderModel() {
 		lowerValue = 0;
 		min = 0;
@@ -31,11 +40,28 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		max = 100;
 	}
 
+	/**
+	 * Verify that the inputs are correct, and initialize the variables.
+	 * 
+	 * @param lowVal
+	 *            an int giving the current lower value
+	 * @param lowExt
+	 *            the length of the inner range that begins at the model's lower
+	 *            value
+	 * @param upVal
+	 *            an int giving the current upper value
+	 * @param upExt
+	 *            the length of the inner range that begins at the model's upper
+	 *            value
+	 * @param min
+	 *            an int giving the minimum value
+	 * @param max
+	 *            an int giving the maximum value
+	 */
 	public DefaultBoundedRangeSliderModel(int lowVal, int lowExt, int upVal, int upExt, int min, int max) {
 
-		if (max >= min && lowVal >= min && lowVal + lowExt >= lowVal
-				&& lowVal + lowExt <= upVal && upVal + lowExt >= upVal
-				&& upVal + upExt <= max) {
+		if (max >= min && lowVal >= min && lowVal + lowExt >= lowVal && lowVal + lowExt <= upVal
+				&& upVal + lowExt >= upVal && upVal + upExt <= max) {
 			this.lowerValue = lowVal;
 			this.upperValue = upVal;
 			this.lowerExtent = lowExt;
@@ -71,6 +97,13 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		return max;
 	}
 
+	/**
+	 * Sets the current lower value of the model. For a slider, that determines
+	 * where the knob appears. Ensures that the new value, lowVal falls within the
+	 * model's constraints:
+	 * 
+	 * minimum <= lowVal <= lowVal + lowerExtent <= upperValue
+	 */
 	public void setLowerValue(int lowVal) {
 		lowVal = Math.min(lowVal, Integer.MAX_VALUE - lowerExtent);
 
@@ -81,6 +114,13 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		setRangeProperties(newValue, lowerExtent, upperValue, upperExtent, min, max, isAdjusting);
 	}
 
+	/**
+	 * Sets the current upper value of the model. For a slider, that determines
+	 * where the knob appears. Ensures that the new value, upVal falls within the
+	 * model's constraints:
+	 * 
+	 * lowVal <= upVal <= upVal + upperExtent <= maximum
+	 */
 	public void setUpperValue(int upVal) {
 		upVal = Math.min(upVal, Integer.MAX_VALUE - upperExtent);
 
@@ -91,6 +131,12 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		setRangeProperties(lowerValue, lowerExtent, newValue, upperExtent, min, max, isAdjusting);
 	}
 
+	/**
+	 * Sets the extent to lowExt after ensuring that lowExt is greater than or equal
+	 * to zero and falls within the model's constraints:
+	 * 
+	 * minimum <= lowerValue <= lowerValue + lowExt <= maximum
+	 */
 	public void setLowerExtent(int lowExt) {
 		int newExtent = Math.max(0, lowExt);
 
@@ -100,6 +146,12 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		setRangeProperties(lowerValue, newExtent, upperValue, upperExtent, min, max, isAdjusting);
 	}
 
+	/**
+	 * Sets the extent to upExt after ensuring that upExt is greater than or equal
+	 * to zero and falls within the model's constraints:
+	 * 
+	 * lowVal <= upVal <= upperValue + upExt <= maximum
+	 */
 	public void setUpperExtent(int upExt) {
 		int newExtent = Math.max(0, upExt);
 
@@ -109,6 +161,13 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		setRangeProperties(lowerValue, lowerExtent, upperValue, newExtent, min, max, isAdjusting);
 	}
 
+	/**
+	 * Sets the minimum to n after ensuring that n that the other three properties
+	 * obey the model's constraints:
+	 * 
+	 * minimum <= value <= value + extent <= maximum
+	 * 
+	 */
 	public void setMinimum(int n) {
 		int newMax = Math.max(n, max);
 		int newLowerValue = Math.max(n, lowerValue);
@@ -119,6 +178,13 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		setRangeProperties(newLowerValue, newLowerExtent, newUpperValue, newUpperExtent, n, newMax, isAdjusting);
 	}
 
+	/**
+	 * Sets the maximum to n after ensuring that n that the other three properties
+	 * obey the model's constraints:
+	 * 
+	 * minimum &lt;= value &lt;= value + extent &lt;= maximum
+	 * 
+	 */
 	public void setMaximum(int n) {
 		int newMin = Math.min(n, min);
 		int newLowerExtent = Math.min(n - newMin, lowerExtent);
@@ -137,6 +203,14 @@ public class DefaultBoundedRangeSliderModel implements BoundedRangeSliderModel, 
 		return isAdjusting;
 	}
 
+	/**
+	 * Sets all of the BoundedRangeSliderModel properties after forcing the
+	 * arguments to obey the usual constraints:
+	 *
+	 * minimum &lt;= value &lt;= value+extent &lt;= maximum
+	 *
+	 * At most, one ChangeEvent is generated.
+	 */
 	@Override
 	public void setRangeProperties(int newLowerValue, int newLowerExtent, int newUpperValue, int newUpperExtent,
 			int newMin, int newMax, boolean adjusting) {

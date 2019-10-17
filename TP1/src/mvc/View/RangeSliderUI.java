@@ -14,8 +14,14 @@ import javax.swing.plaf.basic.BasicSliderUI;
 
 import mvc.Model.RangeSlider;
 
+/**
+ * A basic implementation of the RangeSliderUI, based on BasicSliderUI
+ * 
+ * @author Eva Leo Xavier
+ *
+ */
 public class RangeSliderUI extends BasicSliderUI {
-	private Rectangle upperThumb;
+	private Rectangle upperThumb; // The second thumb rectangle
 	private Rectangle unionRect;
 	private boolean firstThumbScroll; // true when firstThumb is to be scrolled, false when it is for the second
 
@@ -43,11 +49,21 @@ public class RangeSliderUI extends BasicSliderUI {
 	}
 
 	@Override
+	/**
+	 * Creates a track listener, which is the controller part of the Range Slider.
+	 * 
+	 * @return a track listener
+	 * @param slider
+	 *            a slider
+	 */
 	protected TrackListener createTrackListener(JSlider s) {
 		return new RangeTrackListener();
 	}
 
 	@Override
+	/**
+	 * Calculates the thumb size rectangle.
+	 */
 	protected void calculateThumbSize() {
 		// super.calculateThumbSize();
 		thumbRect.setSize(getThumbSize());
@@ -55,6 +71,9 @@ public class RangeSliderUI extends BasicSliderUI {
 	}
 
 	@Override
+	/**
+	 * Calculates the thumb location.
+	 */
 	protected void calculateThumbLocation() {
 		super.calculateThumbLocation();
 
@@ -74,6 +93,9 @@ public class RangeSliderUI extends BasicSliderUI {
 	}
 
 	@Override
+	/**
+	 * Paints the thumbs : the first and the second one.
+	 */
 	public void paintThumb(Graphics g) {
 		// super.paintThumb(g);
 
@@ -84,6 +106,14 @@ public class RangeSliderUI extends BasicSliderUI {
 		subPaintThumb(g, knobBounds);
 	}
 
+	/**
+	 * Paints track.
+	 * 
+	 * @param g
+	 *            the graphics
+	 * @param knobBounds
+	 *            a rectangle
+	 */
 	private void subPaintThumb(Graphics g, Rectangle knobBounds) {
 		int w = knobBounds.width;
 		int h = knobBounds.height;
@@ -121,8 +151,17 @@ public class RangeSliderUI extends BasicSliderUI {
 		slider.repaint(unionRect.x, unionRect.y, unionRect.width, unionRect.height);
 	}
 
+	/////////////////////////////////////////////////////////////////////////
+	/// Range Track Listener Class
+	/////////////////////////////////////////////////////////////////////////
+	/**
+	 * Track mouse movements.
+	 *
+	 * This class should be treated as a"protected" inner class. Instantiate it only
+	 * within subclasses.
+	 */
 	public class RangeTrackListener extends TrackListener {
-		private boolean lowerDrag, upperDrag;
+		private boolean lowerDrag, upperDrag; // Indicate which thumb is dragging
 
 		public RangeTrackListener() {
 			super();
@@ -132,6 +171,7 @@ public class RangeSliderUI extends BasicSliderUI {
 		}
 
 		@Override
+
 		public void mouseReleased(MouseEvent e) {
 			if (!slider.isEnabled())
 				return;
@@ -147,6 +187,12 @@ public class RangeSliderUI extends BasicSliderUI {
 		}
 
 		@Override
+		/**
+		 * If the mouse is pressed above the "thumb" component then reduce the
+		 * scrollbars value by one page ("page up"), otherwise increase it by one page.
+		 * If we click in the first half distance beetween the 2 thumbs, we page up the
+		 * first thumb, otherwise we page down the second one.
+		 */
 		public void mousePressed(MouseEvent e) {
 			if (!slider.isEnabled())
 				return;
@@ -184,7 +230,7 @@ public class RangeSliderUI extends BasicSliderUI {
 
 			if (!thumbRect.contains(e.getPoint()) && !upperThumb.contains(e.getPoint())) {
 				int value = valueForXPosition(currentMouseX);
-				
+
 				if (Math.abs(value - slider.getValue()) <= Math.abs(value - ((RangeSlider) slider).getUpperValue())) {
 					setFirstThumbScroll(true);
 					if (value > slider.getValue()) {
@@ -210,6 +256,10 @@ public class RangeSliderUI extends BasicSliderUI {
 		}
 
 		@Override
+		 /**
+         * Set the models value to the position of the top/left
+         * of the thumb relative to the origin of the track, depending on wich thumb we are dragging.
+         */
 		public void mouseDragged(MouseEvent e) {
 			int thumbsMid;
 
@@ -269,33 +319,36 @@ public class RangeSliderUI extends BasicSliderUI {
 			}
 		}
 	}
-	
+
 	public void setFirstThumbScroll(boolean b) {
 		firstThumbScroll = b;
 	}
-	
+
+	/**
+	 * Make move a thumb by 10% of the maximum range.
+	 */
 	public void scrollByBlock(int direction) {
 		int unit = (slider.getMaximum() - slider.getMinimum()) / 10;
-		
+
 		int moveTo;
 		if (firstThumbScroll) {
 			moveTo = slider.getValue();
 		} else {
 			moveTo = ((RangeSlider) slider).getUpperValue();
 		}
-		
+
 		if (direction > 0) {
 			moveTo += unit;
 		} else {
 			moveTo -= unit;
-		}		
-		
+		}
+
 		if (firstThumbScroll) {
 			slider.setValue(moveTo);
 		} else {
 			((RangeSlider) slider).setUpperValue(moveTo);
 		}
-		
+
 	}
 
 }

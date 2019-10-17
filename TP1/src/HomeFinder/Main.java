@@ -33,15 +33,21 @@ public class Main {
 
 }
 
+/**
+ * The main frame
+ * @author Eva Leo Xavier
+ *
+ */
 class SliderTestFrame extends JFrame {
+	// Fixed variables
 	final int MIN_PRICE = 10;
 	final int MAX_PRICE = 1000;
 	final int MIN_ROOM = 1;
 	final int MAX_ROOM = 15;
 
 	private static final long serialVersionUID = 1L;
-	private ChangeListener listenerRoom, listenerPrice;
-	private JLabel lowPrice = new JLabel();
+	private ChangeListener listenerRoom, listenerPrice; // Listener for change on the sliders
+	private JLabel lowPrice = new JLabel(); // Text for indications
 	private JLabel upPrice = new JLabel();
 	private JLabel lowRoom = new JLabel();
 	private JLabel upRoom = new JLabel();
@@ -123,7 +129,7 @@ class SliderTestFrame extends JFrame {
 		// HOMES CREATION
 		map = new Map(priceSlider, roomSlider, MIN_PRICE, MAX_PRICE, MIN_ROOM, MAX_ROOM);
 
-		// APP PART
+		// MAIN PART
 		JPanel sliders = new JPanel(new GridLayout(1, 2, 40, 0));
 		sliders.add(pricePane);
 		sliders.add(roomPane);
@@ -139,6 +145,11 @@ class SliderTestFrame extends JFrame {
 	}
 }
 
+/**
+ * Represent the map, containing the home
+ * @author Eva Leo Xavier
+ *
+ */
 class Map extends Component {
 	private static final long serialVersionUID = 1L;
 	ArrayList<Home> homes = new ArrayList<>();
@@ -184,9 +195,9 @@ class Map extends Component {
 				// Info text
 				g.setFont(monoFont);
 				FontMetrics fm = g.getFontMetrics();
-				w = fm.stringWidth("P:" + price + "â‚¬");
+				w = fm.stringWidth("P:" + price + "€");
 				h = fm.getAscent();
-				g.drawString("P:" + price + "â‚¬", x - (w / 2), y - h - 3);
+				g.drawString("P:" + price + "€", x - (w / 2), y - h - 3);
 				w = fm.stringWidth("R:" + rooms);
 				h = fm.getAscent();
 				g.drawString("R:" + rooms, x - (w / 2), y - h / 4);
@@ -202,6 +213,10 @@ class Map extends Component {
 		return getPreferredSize();
 	}
 
+	/**
+	 * Generation of random houses (x,y,price and rooms number) 
+	 * @return a list of houses
+	 */
 	public ArrayList<Home> generateHomes() {
 		ArrayList<Home> homes = new ArrayList<>();
 		Home tmp;
