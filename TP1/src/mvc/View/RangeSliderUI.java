@@ -17,6 +17,7 @@ import mvc.Model.RangeSlider;
 public class RangeSliderUI extends BasicSliderUI {
 	private Rectangle upperThumb;
 	private Rectangle unionRect;
+	private boolean firstThumbScroll; // true when firstThumb is to be scrolled, false when it is for the second
 
 	public RangeSliderUI(JSlider slider) {
 		super(slider);
@@ -181,6 +182,26 @@ public class RangeSliderUI extends BasicSliderUI {
 				return;
 			}
 
+			if (!thumbRect.contains(e.getPoint()) && !upperThumb.contains(e.getPoint())) {
+				int value = valueForXPosition(currentMouseX);
+				
+				if (Math.abs(value - slider.getValue()) <= Math.abs(value - ((RangeSlider) slider).getUpperValue())) {
+					setFirstThumbScroll(true);
+					if (value > slider.getValue()) {
+						scrollDueToClickInTrack(POSITIVE_SCROLL);
+					} else {
+						scrollDueToClickInTrack(NEGATIVE_SCROLL);
+					}
+				} else {
+					setFirstThumbScroll(false);
+					if (value > ((RangeSlider) slider).getUpperValue()) {
+						scrollDueToClickInTrack(POSITIVE_SCROLL);
+					} else {
+						scrollDueToClickInTrack(NEGATIVE_SCROLL);
+					}
+				}
+			}
+
 			if (!SwingUtilities.isLeftMouseButton(e))
 				return;
 
@@ -247,6 +268,34 @@ public class RangeSliderUI extends BasicSliderUI {
 				}
 			}
 		}
+	}
+	
+	public void setFirstThumbScroll(boolean b) {
+		firstThumbScroll = b;
+	}
+	
+	public void scrollByBlock(int direction) {
+		int unit = (slider.getMaximum() - slider.getMinimum()) / 10;
+		
+		int moveTo;
+		if (firstThumbScroll) {
+			moveTo = slider.getValue();
+		} else {
+			moveTo = ((RangeSlider) slider).getUpperValue();
+		}
+		
+		if (direction > 0) {
+			moveTo += unit;
+		} else {
+			moveTo -= unit;
+		}		
+		
+		if (firstThumbScroll) {
+			slider.setValue(moveTo);
+		} else {
+			((RangeSlider) slider).setUpperValue(moveTo);
+		}
+		
 	}
 
 }
