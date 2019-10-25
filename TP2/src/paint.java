@@ -171,6 +171,18 @@ class Paint extends JFrame {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(800, 600));
+		
+		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
+		items.add(new MenuItem("Me"));
+		items.add(new MenuItem("Menu2"));
+		items.add(new MenuItem("Menu3dd"));
+		items.add(new MenuItem("Menu4"));
+		items.add(new MenuItem("Me"));
+		items.add(new MenuItem("Menu2"));
+		items.add(new MenuItem("Menu3dd"));
+		items.add(new MenuItem("Menu4"));
+		add(new CircularMenu(items), BorderLayout.CENTER);
+		
 		add(new JToolBar() {
 			{
 				for (AbstractAction tool : tools) {
@@ -202,6 +214,7 @@ class Paint extends JFrame {
 		});
 
 		pack();
+//		repaint();
 		setVisible(true);
 	}
 
@@ -211,6 +224,8 @@ class Paint extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				Paint paint = new Paint("paint");
+				
+				
 			}
 		});
 	}
