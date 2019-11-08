@@ -177,7 +177,10 @@ class Paint extends JFrame {
 		items.add(new MenuItem("Menu2"));
 		items.add(new MenuItem("Menu3dd"));
 		items.add(new MenuItem("Menu4"));
-		items.add(new MenuItem("Me"));
+		items.add(new MenuItem("Menufuudsfh"));
+		items.add(new MenuItem("Menu2"));
+		items.add(new MenuItem("Menu3dd"));
+		items.add(new MenuItem("Menu4"));
 		items.add(new MenuItem("Menu2"));
 		items.add(new MenuItem("Menu3dd"));
 		items.add(new MenuItem("Menu4"));

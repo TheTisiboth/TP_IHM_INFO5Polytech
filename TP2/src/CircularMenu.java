@@ -18,7 +18,7 @@ public class CircularMenu extends JPanel {
 		list = new ArrayList<MenuItem>();
 		radius = 100;
 		center = new Point(0,0);
-		color = new Color(255, 255, 255);
+		color = new Color(150, 150, 150);
 		setSize(radius*3, radius*3);
 	}
 		
@@ -45,24 +45,24 @@ public class CircularMenu extends JPanel {
 				for (int i = list.size() - 1; i >= 0; i--) {
 					taille = list.get(i).getLength();
 					list.get(i).setBounds((int) (xCentre - taille / 2 + radius * Math.cos(i * angle - Math.PI / 2)),
-							(int) (yCentre - taille / 2 + radius * Math.sin(i * angle - Math.PI / 2)), taille + 10,
-							taille + 10);
+							(int) (yCentre - 40 / 2 + radius * Math.sin(i * angle - Math.PI / 2)), taille + 10,
+							40);
 					add(list.get(i));
 				}
 			} else {
 				for (int i = 7; i >= 0; i--) {
 					taille = list.get(i).getLength();
 					list.get(i).setBounds((int) (xCentre - taille / 2 + radius * Math.cos(i * angle - Math.PI / 2)),
-							(int) (yCentre - taille / 2 + radius * Math.sin(i * angle - Math.PI / 2)), taille + 10,
-							taille + 10);
+							(int) (yCentre - 40 / 2 + radius * Math.sin(i * angle - Math.PI / 2)), taille + 10,
+							40);
 					add(list.get(i));
 				}
 				int shift = 1;
 				for (int i = list.size() -1; i > 7; i--,shift+=2) {
 					taille = list.get(i).getLength();
 					list.get(i).setBounds((int) (xCentre - taille / 2 + radius * Math.cos(4 * angle - Math.PI / 2)),
-							(int) (yCentre - taille / 2 + radius * Math.sin(4 * angle - Math.PI / 2)) + taille + (taille*shift) , taille + 10,
-							taille + 10);
+							(int) (yCentre - 40 / 2 + radius * Math.sin(4 * angle - Math.PI / 2)) + taille + (taille*shift) , taille + 10,
+							40);
 					add(list.get(i));
 				}
 			}
