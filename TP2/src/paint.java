@@ -175,15 +175,13 @@ class Paint extends JFrame {
 		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
 		items.add(new MenuItem("Me"));
 		items.add(new MenuItem("Menu2"));
-		items.add(new MenuItem("Menu3dd"));
-		items.add(new MenuItem("Menu4"));
-		items.add(new MenuItem("Menufuudsfh"));
-		items.add(new MenuItem("Menu2"));
-		items.add(new MenuItem("Menu3dd"));
-		items.add(new MenuItem("Menu4"));
-		items.add(new MenuItem("Menu2"));
-		items.add(new MenuItem("Menu3dd"));
-		items.add(new MenuItem("Menu4"));
+//		items.add(new MenuItem("Menu3dd"));
+//		items.add(new MenuItem("Menu4"));
+//		items.add(new MenuItem("Menufuudsfh"));
+//		items.add(new MenuItem("Menu2"));
+//		items.add(new MenuItem("Menu3dd"));
+//		items.add(new MenuItem("Menu4"));
+		
 		add(new CircularMenu(items), BorderLayout.CENTER);
 		
 		add(new JToolBar() {
