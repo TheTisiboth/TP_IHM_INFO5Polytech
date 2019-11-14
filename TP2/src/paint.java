@@ -173,14 +173,14 @@ class Paint extends JFrame {
 		setMinimumSize(new Dimension(800, 600));
 		
 		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
-		items.add(new MenuItem("Me"));
+		items.add(new MenuItem("Me1"));
 		items.add(new MenuItem("Menu2"));
-//		items.add(new MenuItem("Menu3dd"));
-//		items.add(new MenuItem("Menu4"));
-//		items.add(new MenuItem("Menufuudsfh"));
-//		items.add(new MenuItem("Menu2"));
-//		items.add(new MenuItem("Menu3dd"));
-//		items.add(new MenuItem("Menu4"));
+		items.add(new MenuItem("Menu3dd"));
+		items.add(new MenuItem("Menu4"));
+		items.add(new MenuItem("Menu5uudsfh"));
+		items.add(new MenuItem("Menu6"));
+		items.add(new MenuItem("Menu7dd"));
+//		items.add(new MenuItem("Menu8"));
 		
 		add(new CircularMenu(items), BorderLayout.CENTER);
 		

@@ -49,12 +49,13 @@ public class CircularMenu extends JPanel {
 			
 			
 			
-			if (list.size() < 9) {
-				for (int i = list.size() - 1; i >= 0; i--) {
+			if (list.size() <= 8) {
+				angle = (double) (2 * Math.PI / list.size());
+				for (int i = 0; i < list.size(); i++) {
 					taille = list.get(i).getLength();
-					list.get(i).setBounds((int) (xCentre - taille / 2 + radius_text * Math.cos(i * angle - Math.PI / 2)),
-							(int) (yCentre - 40 / 2 + radius_text * Math.sin(i * angle - Math.PI / 2)), taille + 10,
-							40);
+					list.get(i).setBounds((int) (xCentre + radius_text * Math.cos(i * angle) - taille/2),
+							(int) (getHeight() -(yCentre + radius_text * Math.sin(i * angle))- 40/2),
+							taille + 10, 40);
 					add(list.get(i));
 				}
 			} else {
@@ -82,24 +83,20 @@ public class CircularMenu extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		GradientPaint gradient = new GradientPaint(new Point(0, 0), color, new Point(getWidth(), getHeight()), color);
 		g2d.setPaint(gradient);
-//		g2d.fillOval(0, 0, getWidth(), getHeight());
-		
-//		int arcAngle = (int) (360/list.size());
-		int arcAngle = (int) (360/8);
-		Point s1,s2;
-		int startAngle = (int)(arcAngle/2);
-		
-//		g2d.drawLine(radius_text, radius_text, s1.x, s1.y);
+		center.setLocation(radius_border, radius_border);
+		Point s1;
+		double arcAngle = 360/list.size();
+		double startAngle = arcAngle/2;
 		for (int i = 0; i < list.size(); i++) {
-			s1 = new Point((int)(radius_border+radius_border*Math.cos(Math.PI*(startAngle+arcAngle*i)/180)),(int)(300 - (radius_border+radius_border*Math.sin(Math.PI*(startAngle+arcAngle*i)/180))));
-			//s2 = new Point((int)(radius_border+radius_border*Math.cos(startAngle+arcAngle*(i+1))),(int)(radius_border+radius_border*Math.sin(startAngle+arcAngle*(i+1))));
+			s1 = new Point((int)(center.getX()+radius_border*Math.cos(Math.PI*(startAngle+arcAngle*i)/180)),(int)(diameter_border - (center.getY()+radius_border*Math.sin(Math.PI*(startAngle+arcAngle*i)/180))));
 			g2d.setColor(Color.RED);
 			g2d.fillArc(0,0, diameter_border, diameter_border, (int)((startAngle+arcAngle*i)%360), (int)arcAngle);
 			g2d.setColor(Color.BLACK);
-			g2d.drawLine(radius_border, radius_border, s1.x+i, s1.y+i);
-//			g2d.drawLine(radius_border, radius_border, s2.x, s2.y);
+			g2d.drawLine((int) (center.getX()),(int) (center.getY()), s1.x, s1.y);
 		}
-//		g2d.fillRect(0, 0, getWidth(), getHeight());
+		s1 = new Point((int)(center.getX()+radius_border*Math.cos(Math.PI*(startAngle+arcAngle*list.size())/180)),(int)(diameter_border - (center.getY()+radius_border*Math.sin(Math.PI*(startAngle+arcAngle*list.size())/180))));
+		g2d.setColor(Color.BLACK);
+		g2d.drawLine((int) (center.getX()),(int) (center.getY()), s1.x, s1.y);
 	}
 
 }
