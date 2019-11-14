@@ -17,20 +17,13 @@ public class MenuItem extends JPanel {
 	private Color couleur;
 	private String text;
 	private int length;
-	private AbstractAction tool = null;
-	private JButton colorTool = null;
-	private String type;
-	
-	public MenuItem(String t, AbstractAction tl) {
+	private JButton tool = null;
+
+	public MenuItem(String t, JButton tl) {
 		tool = tl;
 		init(t);
 	}
-	
-	public MenuItem(String t, JButton ctl) {
-		colorTool = ctl;
-		init(t);
-	}
-	
+
 	public void init(String t) {
 		couleur = new Color(255, 255, 255);
 		text = t;
@@ -40,20 +33,14 @@ public class MenuItem extends JPanel {
 	}
 
 	public void doClick(int x, int y) {
-		if (tool == null) {
-			JButton jb = new JButton("Press!");
-			MouseEvent me = new MouseEvent(colorTool, // which
-			    MouseEvent.MOUSE_CLICKED, // what
-			    System.currentTimeMillis(), // when
-			    0, // no modifiers
-			    x, y, // where: at (10, 10}
-			    1, // only 1 click 
-			    false); // not a popup trigger
-			colorTool.dispatchEvent(me);
-			System.out.println("test");
-		} else {
-			tool.actionPerformed(null);;
-		}
+		MouseEvent me = new MouseEvent(tool, // which
+				MouseEvent.MOUSE_CLICKED, // what
+				System.currentTimeMillis(), // when
+				0, // no modifiers
+				x, y, // where: at (10, 10}
+				1, // only 1 click
+				false); // not a popup trigger
+		tool.dispatchEvent(me);
 	}
 
 	public void paint(Graphics arg0) {

@@ -115,15 +115,16 @@ public class CircularMenu extends JPanel {
 		addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON1) {					
-					identifySection(e.getPoint()).doClick(getX() + e.getX(), getY() + e.getY());
-				}
 			}
 
 			public void mouseReleased(MouseEvent e) {
 			}
 
 			public void mousePressed(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1) {					
+					identifySection(e.getPoint()).doClick(getX() + e.getX(), getY() + e.getY());
+				}
+				setVisible(false);
 			}
 
 			public void mouseExited(MouseEvent e) {
@@ -165,7 +166,7 @@ public class CircularMenu extends JPanel {
 		int w = getWidth();
 		int h = getHeight();
 		int x = eX - w / 2;
-		int y = eY - h / 2;
+		int y = eY - 3*h / 4;
 		if (x < 0) {
 			x = 0;
 		} else if (x + w > width) {
