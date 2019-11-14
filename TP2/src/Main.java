@@ -1,6 +1,4 @@
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -11,9 +9,7 @@ public class Main {
 		f.getContentPane().setLayout(new BorderLayout());
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setSize(600, 600);
-		
-		
-		
+
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);
 	}

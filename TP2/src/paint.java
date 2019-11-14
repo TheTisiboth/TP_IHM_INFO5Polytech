@@ -32,58 +32,10 @@ import javax.swing.event.MouseInputListener;
 
 /* paint *******************************************************************/
 
-class Paint extends JFrame {
+class paint extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	Vector<Shape> shapes = new Vector<Shape>();
-
-	ColorTool[] buttons = { new ColorTool(Color.BLACK), new ColorTool(Color.DARK_GRAY), new ColorTool(Color.GRAY),
-			new ColorTool(Color.LIGHT_GRAY), new ColorTool(Color.YELLOW), new ColorTool(Color.ORANGE),
-			new ColorTool(Color.RED), new ColorTool(Color.PINK), new ColorTool(Color.MAGENTA),
-			new ColorTool(Color.BLUE), new ColorTool(Color.CYAN), new ColorTool(Color.GREEN) };
-
-	ArrayList<Color> colors = new ArrayList<Color>();
-	Color current = Color.BLACK;
-
-	class ColorTool extends JButton implements MouseListener {
-		Color color;
-
-		public ColorTool(Color c) {
-			color = c;
-			setBackground(c);
-			setText("      ");
-			addMouseListener(this);
-		}
-
-		public void mouseClicked(MouseEvent e) {
-			System.out.println("using color " + color);
-			current = color;
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-
-		}
-	}
 
 	class Tool extends AbstractAction implements MouseInputListener {
 		Point o;
@@ -113,6 +65,27 @@ class Paint extends JFrame {
 
 		public void mousePressed(MouseEvent e) {
 			o = e.getPoint();
+			menu.setVisible(false);
+
+			if (e.getButton() == MouseEvent.BUTTON3) {
+				int w = menu.getWidth();
+				int h = menu.getHeight();
+				int x = e.getX() - w / 2;
+				int y = e.getY() - h / 2;
+				if (x < 0) {
+					x = 0;
+				} else if (x + w > getWidth()) {
+					x = getWidth() - w;
+				}
+
+				if (y < 0) {
+					y = 0;
+				} else if (y + h > getHeight()) {
+					y = getHeight() - y;
+				}
+				menu.setBounds(x, y, w, h);
+				menu.setVisible(true);
+			}
 		}
 
 		public void mouseReleased(MouseEvent e) {
@@ -128,62 +101,151 @@ class Paint extends JFrame {
 
 	Tool tools[] = { new Tool("pen") {
 		public void mouseDragged(MouseEvent e) {
-			Path2D.Double path = (Path2D.Double) shape;
-			if (path == null) {
-				path = new Path2D.Double();
-				path.moveTo(o.getX(), o.getY());
-				shapes.add(shape = path);
-				colors.add(current);
+			if (!menu.isVisible()) {
+				Path2D.Double path = (Path2D.Double) shape;
+				if (path == null) {
+					path = new Path2D.Double();
+					path.moveTo(o.getX(), o.getY());
+					shapes.add(shape = path);
+					colors.add(current);
+				}
+				path.lineTo(e.getX(), e.getY());
+				panel.repaint();
 			}
-			path.lineTo(e.getX(), e.getY());
-			panel.repaint();
 		}
 	}, new Tool("rect") {
 		public void mouseDragged(MouseEvent e) {
-			Rectangle2D.Double rect = (Rectangle2D.Double) shape;
-			if (rect == null) {
-				rect = new Rectangle2D.Double(o.getX(), o.getY(), 0, 0);
-				shapes.add(shape = rect);
-				colors.add(current);
+			if (!menu.isVisible()) {
+				Rectangle2D.Double rect = (Rectangle2D.Double) shape;
+				if (rect == null) {
+					rect = new Rectangle2D.Double(o.getX(), o.getY(), 0, 0);
+					shapes.add(shape = rect);
+					colors.add(current);
+				}
+				rect.setRect(Math.min(e.getX(), o.getX()), Math.min(e.getY(), o.getY()), Math.abs(e.getX() - o.getX()),
+						Math.abs(e.getY() - o.getY()));
+				panel.repaint();
 			}
-			rect.setRect(Math.min(e.getX(), o.getX()), Math.min(e.getY(), o.getY()), Math.abs(e.getX() - o.getX()),
-					Math.abs(e.getY() - o.getY()));
-			panel.repaint();
 		}
 	}, new Tool("ellipse") {
 		public void mouseDragged(MouseEvent e) {
-			Ellipse2D.Double ell = (Ellipse2D.Double) shape;
-			if (ell == null) {
-				ell = new Ellipse2D.Double(o.getX(), o.getY(), 0, 0);
-				shapes.add(shape = ell);
-				colors.add(current);
+			if (!menu.isVisible()) {
+				Ellipse2D.Double ell = (Ellipse2D.Double) shape;
+				if (ell == null) {
+					ell = new Ellipse2D.Double(o.getX(), o.getY(), 0, 0);
+					shapes.add(shape = ell);
+					colors.add(current);
+				}
+				ell.setFrame(Math.min(e.getX(), o.getX()), Math.min(e.getY(), o.getY()), Math.abs(e.getX() - o.getX()),
+						Math.abs(e.getY() - o.getY()));
+				panel.repaint();
 			}
-			ell.setFrame(Math.min(e.getX(), o.getX()), Math.min(e.getY(), o.getY()), Math.abs(e.getX() - o.getX()),
-					Math.abs(e.getY() - o.getY()));
-			panel.repaint();
 		}
 	} };
 	Tool tool;
 
-	JPanel panel;
+	class ColorTool extends JButton implements MouseListener {
+		Color color;
 
-	public Paint(String title) {
+		public ColorTool(Color c) {
+			super("    ");
+			color = c;
+			setBackground(c);
+			addMouseListener(this);
+		}
+
+		public void mouseClicked(MouseEvent e) {
+			System.out.println("using color " + color);
+			current = color;
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+	}
+
+	ColorTool[] buttons = { new ColorTool(Color.BLACK), new ColorTool(Color.DARK_GRAY), new ColorTool(Color.GRAY),
+			new ColorTool(Color.LIGHT_GRAY), new ColorTool(Color.YELLOW), new ColorTool(Color.ORANGE),
+			new ColorTool(Color.RED), new ColorTool(Color.PINK), new ColorTool(Color.MAGENTA),
+			new ColorTool(Color.BLUE), new ColorTool(Color.CYAN), new ColorTool(Color.GREEN) };
+
+	ArrayList<Color> colors = new ArrayList<Color>();
+	Color current = Color.BLACK;
+
+	JPanel panel;
+	CircularMenu menu;
+
+	public paint(String title) {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(800, 600));
-		
+
 		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
-		items.add(new MenuItem("Me"));
-		items.add(new MenuItem("Menu2"));
-//		items.add(new MenuItem("Menu3dd"));
-//		items.add(new MenuItem("Menu4"));
-//		items.add(new MenuItem("Menufuudsfh"));
-//		items.add(new MenuItem("Menu2"));
-//		items.add(new MenuItem("Menu3dd"));
-//		items.add(new MenuItem("Menu4"));
-		
-		add(new CircularMenu(items), BorderLayout.CENTER);
-		
+		items.add(new MenuItem("Pen", tools[0]));
+		items.add(new MenuItem("Black", buttons[0]));
+		items.add(new MenuItem("Rect", tools[2]));
+		items.add(new MenuItem("Ellipse", tools[1]));
+		items.add(new MenuItem("Red", buttons[6]));
+		items.add(new MenuItem("Green", buttons[11]));
+		menu = new CircularMenu(items);
+		menu.setVisible(false);
+		add(menu, BorderLayout.CENTER);
+
+		addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				menu.setVisible(false);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (!menu.isVisible())
+					if (e.getButton() == MouseEvent.BUTTON3) {
+						int w = menu.getWidth();
+						int h = menu.getHeight();
+						int x = e.getX() - w / 2;
+						int y = e.getY() - 3 * h / 4;
+						if (x < 0) {
+							x = 0;
+						} else if (x + w > getWidth()) {
+							x = getWidth() - w;
+						}
+
+						if (y < 0) {
+							y = 0;
+						} else if (y + h > getHeight()) {
+							y = getHeight() - y;
+						}
+						menu.setBounds(x, y, w, h);
+						menu.setVisible(true);
+					}
+			}
+		});
+
 		add(new JToolBar() {
 			{
 				for (AbstractAction tool : tools) {
@@ -215,7 +277,6 @@ class Paint extends JFrame {
 		});
 
 		pack();
-//		repaint();
 		setVisible(true);
 	}
 
@@ -224,9 +285,8 @@ class Paint extends JFrame {
 	public static void main(String argv[]) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				Paint paint = new Paint("paint");
-				
-				
+				paint paint = new paint("paint");
+
 			}
 		});
 	}
