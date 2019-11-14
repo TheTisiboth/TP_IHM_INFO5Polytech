@@ -4,14 +4,15 @@
 
 ### Fonctionnalités
 
-Clic droit dans la fenetre -> ouverture du menu circulaire.
-Si l'on refait un clic droit a un autre endroit de la fenetre, on ferme le menu circulaire, et on le réouvre à l'endroit cliqué.
+Clic droit dans la fenetre -> ouverture du menu circulaire.   
+Si l'on refait un clic droit a un autre endroit de la fenetre, on ferme le menu circulaire, et on le réouvre à l'endroit cliqué.   
 Clic gauche dans le menu -> selectionne un item du menu. 
-La zone de clic correspond au secteur angulaire encadrant l'item (partie délimitée par 2 rayons et un arc de cercle, représentée graphiquement sur le menu).
+La zone de clic correspond au secteur angulaire encadrant l'item (partie délimitée par 2 rayons et un arc de cercle, représentée graphiquement sur le menu).   
 Si cet item mène à un sous menu, alors :
 1. On ferme l'ancien menu
 2. On ouvre le nouveau sous menu, qui est un circular menu, à l'endroit du clic.   
 Clic gauche en dehors du menu -> fermeture des menus ouvert   
+
 Nous avons limité le nombre d'item à 8 au maximum, dans le menu circulaire. Au dela, on les affiche dans une liste verticale, en dessous du cercle.
 
 ### Contenu du menu
