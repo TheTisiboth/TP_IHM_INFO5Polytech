@@ -89,7 +89,6 @@ public class CircularMenu extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		center.setLocation(radius_border, radius_border);
 		Point s1;
 		double arcAngle = 360 / list.size();
 		double startAngle = arcAngle / 2;
@@ -139,5 +138,27 @@ public class CircularMenu extends JPanel {
 
 		});
 	}
+	
+	public MenuItem identifySection(Point clickPoint) {
+		double angle;
+		double dist = clickPoint.distance(center);
+		int sectionsNbr;
+		if (list.size() <= 8) {
+			sectionsNbr = list.size();
+		}
+		else {
+			sectionsNbr = 8;
+		}
+		if ((clickPoint.getY() - center.getY()) < 0) {
+			angle = Math.acos((clickPoint.getX() - center.getX())/dist);
+		}
+		else {
+			angle = 2*Math.PI - Math.acos((clickPoint.getX() - center.getX())/dist);
+		}
+		double arcAngle  = 2*Math.PI / sectionsNbr;
+		int index = (int) (Math.floor(angle/arcAngle));
+		return list.get(index);
+	}
+	
 
 }
