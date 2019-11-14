@@ -215,6 +215,16 @@ class paint extends JFrame {
 		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
 		items.add(new MenuItem("Tools", bTools));
 		items.add(new MenuItem("Colors", bColors));
+		items.add(new MenuItem("Tools", bTools));
+		items.add(new MenuItem("Colors", bColors));
+		items.add(new MenuItem("Tools", bTools));
+		items.add(new MenuItem("Colors", bColors));
+		items.add(new MenuItem("Colors", bColors));
+		items.add(new MenuItem("Colors", bColors));
+		items.add(new MenuItem("Colors", bColors));
+		items.add(new MenuItem("Colors", bColors));
+		items.add(new MenuItem("Colors", bColors));
+		items.add(new MenuItem("Colors", bColors));
 		mainMenu = new CircularMenu(items);
 		mainMenu.setVisible(false);
 		add(mainMenu, BorderLayout.CENTER);
