@@ -125,11 +125,7 @@ public class CircularMenu extends JPanel {
 			}
 
 			public void mouseExited(MouseEvent e) {
-				if (Math.sqrt(Math.pow(e.getX(), 2) + Math.pow(e.getY(), 2)) < Math.pow(radius_border, 2)) {
-					setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				} else {
-					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-				}
+				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
 
 			public void mouseEntered(MouseEvent e) {

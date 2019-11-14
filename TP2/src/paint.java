@@ -65,26 +65,12 @@ class paint extends JFrame {
 
 		public void mousePressed(MouseEvent e) {
 			o = e.getPoint();
-			menu.setVisible(false);
+			mainMenu.setVisible(false);
+			toolsMenu.setVisible(false);
+			colorsMenu.setVisible(false);
 
 			if (e.getButton() == MouseEvent.BUTTON3) {
-				int w = menu.getWidth();
-				int h = menu.getHeight();
-				int x = e.getX() - w / 2;
-				int y = e.getY() - h / 2;
-				if (x < 0) {
-					x = 0;
-				} else if (x + w > getWidth()) {
-					x = getWidth() - w;
-				}
-
-				if (y < 0) {
-					y = 0;
-				} else if (y + h > getHeight()) {
-					y = getHeight() - y;
-				}
-				menu.setBounds(x, y, w, h);
-				menu.setVisible(true);
+				handlePlacement(mainMenu, e.getX(), e.getY());
 			}
 		}
 
@@ -101,7 +87,7 @@ class paint extends JFrame {
 
 	Tool tools[] = { new Tool("pen") {
 		public void mouseDragged(MouseEvent e) {
-			if (!menu.isVisible()) {
+			if (!mainMenu.isVisible()) {
 				Path2D.Double path = (Path2D.Double) shape;
 				if (path == null) {
 					path = new Path2D.Double();
@@ -115,7 +101,7 @@ class paint extends JFrame {
 		}
 	}, new Tool("rect") {
 		public void mouseDragged(MouseEvent e) {
-			if (!menu.isVisible()) {
+			if (!mainMenu.isVisible()) {
 				Rectangle2D.Double rect = (Rectangle2D.Double) shape;
 				if (rect == null) {
 					rect = new Rectangle2D.Double(o.getX(), o.getY(), 0, 0);
@@ -129,7 +115,7 @@ class paint extends JFrame {
 		}
 	}, new Tool("ellipse") {
 		public void mouseDragged(MouseEvent e) {
-			if (!menu.isVisible()) {
+			if (!mainMenu.isVisible()) {
 				Ellipse2D.Double ell = (Ellipse2D.Double) shape;
 				if (ell == null) {
 					ell = new Ellipse2D.Double(o.getX(), o.getY(), 0, 0);
@@ -185,28 +171,92 @@ class paint extends JFrame {
 	Color current = Color.BLACK;
 
 	JPanel panel;
-	CircularMenu menu;
+	CircularMenu mainMenu, toolsMenu, colorsMenu;
+
+	private void initMenus() {
+		JButton bTools = new JButton();
+		bTools.addMouseListener(new MouseListener() {
+			public void mouseClicked(MouseEvent e) {
+				mainMenu.setVisible(false);
+				handlePlacement(toolsMenu, e.getX(), e.getY());
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+		JButton bColors = new JButton();
+		bColors.addMouseListener(new MouseListener() {
+			public void mouseClicked(MouseEvent e) {
+				mainMenu.setVisible(false);
+				handlePlacement(colorsMenu, e.getX(), e.getY());
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+
+		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
+		items.add(new MenuItem("Tools", bTools));
+		items.add(new MenuItem("Colors", bColors));
+		mainMenu = new CircularMenu(items);
+		mainMenu.setVisible(false);
+		add(mainMenu, BorderLayout.CENTER);
+
+		items = new ArrayList<MenuItem>();
+		items.add(new MenuItem("Pen", tools[0]));
+		items.add(new MenuItem("Rect", tools[1]));
+		items.add(new MenuItem("Ellipse", tools[2]));
+		CircularMenu toolsMenu = new CircularMenu(items);
+		toolsMenu.setVisible(false);
+		add(toolsMenu, BorderLayout.CENTER);
+
+		items = new ArrayList<MenuItem>();
+		items.add(new MenuItem("Black", buttons[0]));
+		items.add(new MenuItem("Dark Gray", buttons[1]));
+		items.add(new MenuItem("Gray", buttons[2]));
+		items.add(new MenuItem("Light Gray", buttons[3]));
+		items.add(new MenuItem("Yellow", buttons[4]));
+		items.add(new MenuItem("Orange", buttons[5]));
+		items.add(new MenuItem("Red", buttons[6]));
+		items.add(new MenuItem("Pink", buttons[7]));
+		items.add(new MenuItem("Magenta", buttons[8]));
+		items.add(new MenuItem("Blue", buttons[9]));
+		items.add(new MenuItem("Cyan", buttons[10]));
+		items.add(new MenuItem("Green", buttons[11]));
+		CircularMenu colorsMenu = new CircularMenu(items);
+		colorsMenu.setVisible(false);
+		add(colorsMenu, BorderLayout.CENTER);
+	}
 
 	public paint(String title) {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(800, 600));
-
-		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
-		items.add(new MenuItem("Pen", tools[0]));
-		items.add(new MenuItem("Black", buttons[0]));
-		items.add(new MenuItem("Rect", tools[2]));
-		items.add(new MenuItem("Ellipse", tools[1]));
-		items.add(new MenuItem("Red", buttons[6]));
-		items.add(new MenuItem("Green", buttons[11]));
-		menu = new CircularMenu(items);
-		menu.setVisible(false);
-		add(menu, BorderLayout.CENTER);
+		
+		initMenus();
 
 		addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				menu.setVisible(false);
+				mainMenu.setVisible(false);
 			}
 
 			@Override
@@ -223,25 +273,9 @@ class paint extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (!menu.isVisible())
+				if (!mainMenu.isVisible())
 					if (e.getButton() == MouseEvent.BUTTON3) {
-						int w = menu.getWidth();
-						int h = menu.getHeight();
-						int x = e.getX() - w / 2;
-						int y = e.getY() - 3 * h / 4;
-						if (x < 0) {
-							x = 0;
-						} else if (x + w > getWidth()) {
-							x = getWidth() - w;
-						}
-
-						if (y < 0) {
-							y = 0;
-						} else if (y + h > getHeight()) {
-							y = getHeight() - y;
-						}
-						menu.setBounds(x, y, w, h);
-						menu.setVisible(true);
+						handlePlacement(mainMenu, e.getX(), e.getY());
 					}
 			}
 		});
@@ -278,6 +312,26 @@ class paint extends JFrame {
 
 		pack();
 		setVisible(true);
+	}
+
+	public void handlePlacement(CircularMenu m, int eX, int eY) {
+		int w = m.getWidth();
+		int h = m.getHeight();
+		int x = eX - w / 2;
+		int y = eY - h / 2;
+		if (x < 0) {
+			x = 0;
+		} else if (x + w > getWidth()) {
+			x = getWidth() - w;
+		}
+
+		if (y < 0) {
+			y = 0;
+		} else if (y + h > getHeight()) {
+			y = getHeight() - y;
+		}
+		m.setBounds(x, y, w, h);
+		m.setVisible(true);
 	}
 
 	/* main *********************************************************************/
