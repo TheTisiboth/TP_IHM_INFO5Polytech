@@ -7,14 +7,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class MenuItem extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private Color couleur;
 	private String text;
 	private int length;
 	private JButton tool = null;
@@ -25,7 +23,6 @@ public class MenuItem extends JPanel {
 	}
 
 	public void init(String t) {
-		couleur = new Color(255, 255, 255);
 		text = t;
 		length = t.length() * 12;
 		this.setSize(new Dimension(length + 10, length + 10));
@@ -61,7 +58,6 @@ public class MenuItem extends JPanel {
 	}
 
 	public int getLength() {
-		// TODO Auto-generated method stub
 		return length;
 	}
 }

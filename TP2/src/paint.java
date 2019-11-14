@@ -32,19 +32,19 @@ import javax.swing.SwingUtilities;
 class paint extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	// ---------------------------------- //
 	// | INITIALISATION FOR SHAPE TOOLS | //
 	// ---------------------------------- //
 	static Vector<Shape> shapes = new Vector<Shape>();
 
-	ShapeTool tools[] = {new ShapeTool("pen"), new ShapeTool("rect"), new ShapeTool("ellipse")};
+	ShapeTool tools[] = { new ShapeTool("pen"), new ShapeTool("rect"), new ShapeTool("ellipse") };
 	static ShapeTool tool;
-	
+
 	public static void setTool(ShapeTool t) {
 		tool = t;
 	}
-	
+
 	// ---------------------------------- //
 	// | INITIALISATION FOR COLOR TOOLS | //
 	// ---------------------------------- //
@@ -55,7 +55,7 @@ class paint extends JFrame {
 
 	static ArrayList<Color> colors = new ArrayList<Color>();
 	static Color current = Color.BLACK;
-	
+
 	public static void setCurrentColor(Color c) {
 		current = c;
 	}
@@ -101,7 +101,7 @@ class paint extends JFrame {
 		colorsMenu = new CircularMenu(items);
 		colorsMenu.setVisible(false);
 		add(colorsMenu, BorderLayout.CENTER);
-		
+
 		bTools.init(toolsMenu, getWidth(), getHeight());
 		bColors.init(colorsMenu, getWidth(), getHeight());
 	}
@@ -109,11 +109,12 @@ class paint extends JFrame {
 	// ---------------------------------- //
 	// | MAIN LOGIC FOR OUR APPLICATION | //
 	// ---------------------------------- //
+	@SuppressWarnings("serial")
 	public paint(String title) {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(1400, 1400));
-		
+
 		initMenus();
 
 		addMouseListener(new MouseListener() {
@@ -139,7 +140,7 @@ class paint extends JFrame {
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					mainMenu.handlePlacement(getWidth(), getHeight(), e.getX(), e.getY());
 				}
-				
+
 				if (tool != null) {
 					MouseEvent me = new MouseEvent(tool, // which
 							MouseEvent.MOUSE_PRESSED, // what
@@ -164,53 +165,57 @@ class paint extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 			}
 		});
-		
+
 		addMouseMotionListener(new MouseMotionListener() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				switch (tool.type) {
-				case "pen":
-					Path2D.Double path = (Path2D.Double) tool.shape;
-					if (path == null) {
-						path = new Path2D.Double();
-						path.moveTo(tool.o.getX(), tool.o.getY());
-						shapes.add(tool.shape = path);
-						colors.add(current);
-					}
-					path.lineTo(e.getX(), e.getY());
-					repaint();
-					break;
-				case "rect":
-					Rectangle2D.Double rect = (Rectangle2D.Double) tool.shape;;
-					if (rect == null) {
-						rect = new Rectangle2D.Double(tool.o.getX(), tool.o.getY(), 0, 0);
-						shapes.add(tool.shape = rect);
-						colors.add(current);
-					}
-					rect.setRect(Math.min(e.getX(), tool.o.getX()), Math.min(e.getY(), tool.o.getY()), Math.abs(e.getX() - tool.o.getX()),
-							Math.abs(e.getY() - tool.o.getY()));
-					repaint();
+				if (tool != null) {
+					switch (tool.type) {
+					case "pen":
+						Path2D.Double path = (Path2D.Double) tool.shape;
+						if (path == null) {
+							path = new Path2D.Double();
+							path.moveTo(tool.o.getX(), tool.o.getY());
+							shapes.add(tool.shape = path);
+							colors.add(current);
+						}
+						path.lineTo(e.getX(), e.getY());
+						repaint();
+						break;
+					case "rect":
+						Rectangle2D.Double rect = (Rectangle2D.Double) tool.shape;
+						;
+						if (rect == null) {
+							rect = new Rectangle2D.Double(tool.o.getX(), tool.o.getY(), 0, 0);
+							shapes.add(tool.shape = rect);
+							colors.add(current);
+						}
+						rect.setRect(Math.min(e.getX(), tool.o.getX()), Math.min(e.getY(), tool.o.getY()),
+								Math.abs(e.getX() - tool.o.getX()), Math.abs(e.getY() - tool.o.getY()));
+						repaint();
 
-					break;
-				case "ellipse":
-					Ellipse2D.Double ell = (Ellipse2D.Double) tool.shape;;
-					if (ell == null) {
-						ell = new Ellipse2D.Double(tool.o.getX(), tool.o.getY(), 0, 0);
-						shapes.add(tool.shape = ell);
-						colors.add(current);
+						break;
+					case "ellipse":
+						Ellipse2D.Double ell = (Ellipse2D.Double) tool.shape;
+						;
+						if (ell == null) {
+							ell = new Ellipse2D.Double(tool.o.getX(), tool.o.getY(), 0, 0);
+							shapes.add(tool.shape = ell);
+							colors.add(current);
+						}
+						ell.setFrame(Math.min(e.getX(), tool.o.getX()), Math.min(e.getY(), tool.o.getY()),
+								Math.abs(e.getX() - tool.o.getX()), Math.abs(e.getY() - tool.o.getY()));
+						repaint();
+						break;
+					default:
+						System.out.println("Error");
 					}
-					ell.setFrame(Math.min(e.getX(), tool.o.getX()), Math.min(e.getY(), tool.o.getY()), Math.abs(e.getX() - tool.o.getX()),
-							Math.abs(e.getY() - tool.o.getY()));
-					repaint();
-					break;
-				default:
-					System.out.println("Error");
 				}
 			}
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
-			}	
+			}
 		});
 
 		add(new JToolBar() {
@@ -252,8 +257,7 @@ class paint extends JFrame {
 	public static void main(String argv[]) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				paint paint = new paint("paint");
-
+				new paint("paint");
 			}
 		});
 	}

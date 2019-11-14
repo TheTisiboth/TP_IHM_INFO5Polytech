@@ -6,6 +6,8 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 
 class ShapeTool extends JButton implements MouseListener {
+
+	private static final long serialVersionUID = 1L;
 	Point o;
 	Shape shape;
 	String type;
