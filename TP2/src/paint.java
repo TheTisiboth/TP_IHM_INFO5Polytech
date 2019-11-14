@@ -68,7 +68,6 @@ class paint extends JFrame {
 			mainMenu.setVisible(false);
 			toolsMenu.setVisible(false);
 			colorsMenu.setVisible(false);
-
 			if (e.getButton() == MouseEvent.BUTTON3) {
 				handlePlacement(mainMenu, e.getX(), e.getY());
 			}

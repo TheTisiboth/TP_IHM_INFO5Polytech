@@ -122,6 +122,7 @@ public class CircularMenu extends JPanel {
 
 			public void mousePressed(MouseEvent e) {
 
+				MenuItem it = identifySection(e.getPoint());
 			}
 
 			public void mouseExited(MouseEvent e) {
@@ -158,6 +159,7 @@ public class CircularMenu extends JPanel {
 		double arcAngle  = 2*Math.PI / sectionsNbr;
 		angle = (angle + arcAngle/2)%(2*Math.PI);
 		int index = (int) (Math.floor(angle/arcAngle));
+		System.out.println(index);
 		return list.get(index);
 	}
 	
