@@ -160,6 +160,7 @@ public class CircularMenu extends JPanel {
 			angle = 2*Math.PI - Math.acos((clickPoint.getX() - center.getX())/dist);
 		}
 		double arcAngle  = 2*Math.PI / sectionsNbr;
+		angle = (angle + arcAngle/2)%(2*Math.PI);
 		int index = (int) (Math.floor(angle/arcAngle));
 		return list.get(index);
 	}
