@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -38,9 +39,18 @@ public class MenuItem extends JPanel {
 		this.setOpaque(false);
 	}
 
-	public void doClick() {
+	public void doClick(int x, int y) {
 		if (tool == null) {
-			colorTool.doClick();
+			JButton jb = new JButton("Press!");
+			MouseEvent me = new MouseEvent(colorTool, // which
+			    MouseEvent.MOUSE_CLICKED, // what
+			    System.currentTimeMillis(), // when
+			    0, // no modifiers
+			    x, y, // where: at (10, 10}
+			    1, // only 1 click 
+			    false); // not a popup trigger
+			colorTool.dispatchEvent(me);
+			System.out.println("test");
 		} else {
 			tool.actionPerformed(null);;
 		}

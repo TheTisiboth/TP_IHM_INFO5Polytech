@@ -97,7 +97,7 @@ public class CircularMenu extends JPanel {
 					(int) (center.getX() + radius_border * Math.cos(Math.PI * (startAngle + arcAngle * i) / 180)),
 					(int) (diameter_border
 							- (center.getY() + radius_border * Math.sin(Math.PI * (startAngle + arcAngle * i) / 180))));
-			g2d.setColor(Color.RED);
+			g2d.setColor(color);
 			g2d.fillArc(0, 0, diameter_border, diameter_border, (int) ((startAngle + arcAngle * i) % 360),
 					(int) arcAngle);
 			g2d.setColor(Color.BLACK);
@@ -115,13 +115,15 @@ public class CircularMenu extends JPanel {
 		addMouseListener(new MouseListener() {
 
 			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1) {					
+					identifySection(e.getPoint()).doClick(getX() + e.getX(), getY() + e.getY());
+				}
 			}
 
 			public void mouseReleased(MouseEvent e) {
 			}
 
 			public void mousePressed(MouseEvent e) {
-
 			}
 
 			public void mouseExited(MouseEvent e) {
@@ -138,27 +140,45 @@ public class CircularMenu extends JPanel {
 
 		});
 	}
-	
+
 	public MenuItem identifySection(Point clickPoint) {
 		double angle;
 		double dist = clickPoint.distance(center);
 		int sectionsNbr;
 		if (list.size() <= 8) {
 			sectionsNbr = list.size();
-		}
-		else {
+		} else {
 			sectionsNbr = 8;
 		}
 		if ((clickPoint.getY() - center.getY()) < 0) {
-			angle = Math.acos((clickPoint.getX() - center.getX())/dist);
+			angle = Math.acos((clickPoint.getX() - center.getX()) / dist);
+		} else {
+			angle = 2 * Math.PI - Math.acos((clickPoint.getX() - center.getX()) / dist);
 		}
-		else {
-			angle = 2*Math.PI - Math.acos((clickPoint.getX() - center.getX())/dist);
-		}
-		double arcAngle  = 2*Math.PI / sectionsNbr;
-		int index = (int) (Math.floor(angle/arcAngle));
+		double arcAngle = 2 * Math.PI / sectionsNbr;
+		int index = (int) (Math.floor(angle / arcAngle));
+		
 		return list.get(index);
 	}
 	
+	public void handlePlacement(int width, int height, int eX, int eY) {
+		int w = getWidth();
+		int h = getHeight();
+		int x = eX - w / 2;
+		int y = eY - h / 2;
+		if (x < 0) {
+			x = 0;
+		} else if (x + w > width) {
+			x = width - w;
+		}
+
+		if (y < 0) {
+			y = 0;
+		} else if (y + h > height) {
+			y = height - y;
+		}
+		setBounds(x, y, w, h);
+		setVisible(true);
+	}
 
 }

@@ -37,11 +37,11 @@ class paint extends JFrame {
 	private static final long serialVersionUID = 1L;
 	Vector<Shape> shapes = new Vector<Shape>();
 
-	class Tool extends AbstractAction implements MouseInputListener {
+	class ShapeTool extends AbstractAction implements MouseInputListener {
 		Point o;
 		Shape shape;
 
-		public Tool(String name) {
+		public ShapeTool(String name) {
 			super(name);
 		}
 
@@ -66,11 +66,9 @@ class paint extends JFrame {
 		public void mousePressed(MouseEvent e) {
 			o = e.getPoint();
 			mainMenu.setVisible(false);
-			toolsMenu.setVisible(false);
-			colorsMenu.setVisible(false);
 
 			if (e.getButton() == MouseEvent.BUTTON3) {
-				handlePlacement(mainMenu, e.getX(), e.getY());
+				mainMenu.handlePlacement(getWidth(), getHeight(), e.getX(), e.getY());
 			}
 		}
 
@@ -85,7 +83,7 @@ class paint extends JFrame {
 		}
 	}
 
-	Tool tools[] = { new Tool("pen") {
+	ShapeTool tools[] = { new ShapeTool("pen") {
 		public void mouseDragged(MouseEvent e) {
 			if (!mainMenu.isVisible()) {
 				Path2D.Double path = (Path2D.Double) shape;
@@ -99,7 +97,7 @@ class paint extends JFrame {
 				panel.repaint();
 			}
 		}
-	}, new Tool("rect") {
+	}, new ShapeTool("rect") {
 		public void mouseDragged(MouseEvent e) {
 			if (!mainMenu.isVisible()) {
 				Rectangle2D.Double rect = (Rectangle2D.Double) shape;
@@ -113,7 +111,7 @@ class paint extends JFrame {
 				panel.repaint();
 			}
 		}
-	}, new Tool("ellipse") {
+	}, new ShapeTool("ellipse") {
 		public void mouseDragged(MouseEvent e) {
 			if (!mainMenu.isVisible()) {
 				Ellipse2D.Double ell = (Ellipse2D.Double) shape;
@@ -128,7 +126,7 @@ class paint extends JFrame {
 			}
 		}
 	} };
-	Tool tool;
+	ShapeTool tool;
 
 	class ColorTool extends JButton implements MouseListener {
 		Color color;
@@ -174,44 +172,8 @@ class paint extends JFrame {
 	CircularMenu mainMenu, toolsMenu, colorsMenu;
 
 	private void initMenus() {
-		JButton bTools = new JButton();
-		bTools.addMouseListener(new MouseListener() {
-			public void mouseClicked(MouseEvent e) {
-				mainMenu.setVisible(false);
-				handlePlacement(toolsMenu, e.getX(), e.getY());
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-
-			@Override
-			public void mouseExited(MouseEvent e) {}
-		});
-		JButton bColors = new JButton();
-		bColors.addMouseListener(new MouseListener() {
-			public void mouseClicked(MouseEvent e) {
-				mainMenu.setVisible(false);
-				handlePlacement(colorsMenu, e.getX(), e.getY());
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-
-			@Override
-			public void mouseExited(MouseEvent e) {}
-		});
+		MenuTool bTools = new MenuTool("Tools");
+		MenuTool bColors = new MenuTool("Colors");
 
 		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
 		items.add(new MenuItem("Tools", bTools));
@@ -244,6 +206,9 @@ class paint extends JFrame {
 		CircularMenu colorsMenu = new CircularMenu(items);
 		colorsMenu.setVisible(false);
 		add(colorsMenu, BorderLayout.CENTER);
+		
+		bTools.init(mainMenu, toolsMenu, getWidth(), getHeight());
+		bColors.init(mainMenu, colorsMenu, getWidth(), getHeight());
 	}
 
 	public paint(String title) {
@@ -275,7 +240,7 @@ class paint extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if (!mainMenu.isVisible())
 					if (e.getButton() == MouseEvent.BUTTON3) {
-						handlePlacement(mainMenu, e.getX(), e.getY());
+						mainMenu.handlePlacement(getWidth(), getHeight(), e.getX(), e.getY());
 					}
 			}
 		});
@@ -312,26 +277,6 @@ class paint extends JFrame {
 
 		pack();
 		setVisible(true);
-	}
-
-	public void handlePlacement(CircularMenu m, int eX, int eY) {
-		int w = m.getWidth();
-		int h = m.getHeight();
-		int x = eX - w / 2;
-		int y = eY - h / 2;
-		if (x < 0) {
-			x = 0;
-		} else if (x + w > getWidth()) {
-			x = getWidth() - w;
-		}
-
-		if (y < 0) {
-			y = 0;
-		} else if (y + h > getHeight()) {
-			y = getHeight() - y;
-		}
-		m.setBounds(x, y, w, h);
-		m.setVisible(true);
 	}
 
 	/* main *********************************************************************/
