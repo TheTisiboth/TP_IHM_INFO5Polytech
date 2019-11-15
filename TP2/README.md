@@ -2,7 +2,7 @@
 
 ## Présentation du Circular menu
 
-Le circular menu est situé dans le package circular (on le lance depuis le package circular.main).
+Le circular menu est situé dans le package circular (on le lance depuis le fichier circular.paintCircular).
 
 ### Fonctionnalités
 Le Circular menu est completement fonctionnel. Pour l'utiliser, on peut faire les actions suivantes :   
@@ -34,7 +34,7 @@ Il faut lancer le programme contenu dans paintCircular, dans le package main.
 
 ## Présentation du Marking Menu
 
-Le marking menu est situé dans le package marking (on le lance depuis le package marking.main).
+Le marking menu est situé dans le package marking (on le lance depuis le fichier marking.paintMarking).
 
 ### Fonctionnalités
 Le marking menu n'est pas completement fonctionnel.
