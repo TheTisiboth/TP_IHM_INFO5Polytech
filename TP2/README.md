@@ -17,6 +17,8 @@ Clic gauche en dehors du menu -> fermeture des menus ouvert
 
 Nous avons limité le nombre d'item à 8 au maximum, dans le menu circulaire. Au dela, on les affiche dans une liste verticale, en dessous du cercle.
 
+Par défaut, la couleur selectionnée est le noir. Si l'on change de couleur, la couleur sera effective jusqu'au prochain changement de couleur. Lorsque l'on change d'outil, on conserve la meme couleur.
+
 ### Contenu du menu
 Nous avons un menu principal, composé des items suivants:
 * Tools : Contient les différents outils de dessins
