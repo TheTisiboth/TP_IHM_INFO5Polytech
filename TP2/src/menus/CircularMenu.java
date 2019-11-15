@@ -13,11 +13,17 @@ import javax.swing.JPanel;
 public class CircularMenu extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	// List of item of the menu
 	private ArrayList<MenuItem> list;
+	// Color of the background of the menu
 	private Color color;
+	// We position the text on a circle, so it is the radius of this circle
 	private int radius_text;
+	// Radius of the circularMenu circle
 	private int radius_border;
+	// Diameter of the circularMenu circle
 	private int diameter_border;
+	// Center of the circularMenu circle
 	private Point center;
 
 	private void init(ArrayList<MenuItem> l, int rT) {
@@ -31,7 +37,7 @@ public class CircularMenu extends JPanel {
 		} else {
 			extraItems = list.size() - 8;
 		}
-
+		// Background grey
 		color = new Color(150, 150, 150);
 		setSize(diameter_border, diameter_border + extraItems * 45 + 5);
 		center = new Point(radius_border, radius_border);
@@ -53,7 +59,10 @@ public class CircularMenu extends JPanel {
 		list.add(item);
 		itemsPlacement();
 	}
-
+	
+	/**
+	 * Positionning of the menu Item in the Circular menu
+	 */
 	private void itemsPlacement() {
 		if (list != null && list.size() > 0) {
 			setLayout(null);
@@ -140,6 +149,7 @@ public class CircularMenu extends JPanel {
 
 			public void mousePressed(MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON1) {
+					// We click on the item related to its circular sector
 					identifySection(e.getPoint()).doClick(getX() + e.getX(), getY() + e.getY());
 				}
 				setVisible(false);
@@ -159,7 +169,12 @@ public class CircularMenu extends JPanel {
 
 		});
 	}
-
+	
+	/**
+	 * Identify on which circular sector we click, and give back the related menu item
+	 * @param clickPoint the coordinate of the clicked point
+	 * @return the menu item clicked
+	 */
 	public MenuItem identifySection(Point clickPoint) {
 		double angle;
 		double dist = clickPoint.distance(center);
@@ -205,6 +220,13 @@ public class CircularMenu extends JPanel {
 		return list.get(index);
 	}
 
+	/**
+	 * Positionning of the menu
+	 * @param width the width of the circular menu panel
+	 * @param height the height of the circular menu panel
+	 * @param eX the x coordinate of the click
+	 * @param eY the y coordinate of the click
+	 */
 	public void handlePlacement(int width, int height, int eX, int eY) {
 		int w = getWidth();
 		int h = getHeight();

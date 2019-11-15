@@ -1,5 +1,6 @@
 package main;
 //////////////////////////////////////////////////////////////////////////////
+
 // file    : Paint.java
 // content : basic painting app
 //////////////////////////////////////////////////////////////////////////////
@@ -73,6 +74,9 @@ public class paintCircular extends JFrame {
 	JPanel panel;
 	CircularMenu mainMenu, toolsMenu, colorsMenu;
 
+	/**
+	 * Create the whole menus, add them to the JFrame, and hide them
+	 */
 	private void initMenus() {
 		MenuTool bTools = new MenuTool("Tools");
 		MenuTool bColors = new MenuTool("Colors");
@@ -122,12 +126,14 @@ public class paintCircular extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(1400, 1400));
 
+		// Initialisation of the menus
 		initMenus();
 
 		addMouseListener(new MouseListener() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (tool != null) {
+					// Create a mouse event to the shapeTool mouseListener
 					MouseEvent me = new MouseEvent(tool, // which
 							MouseEvent.MOUSE_RELEASED, // what
 							System.currentTimeMillis(), // when
@@ -135,16 +141,19 @@ public class paintCircular extends JFrame {
 							e.getX(), e.getY(), // where: at (10, 10}
 							1, // only 1 click
 							false); // not a popup trigger
+					// Send the mouse event
 					tool.dispatchEvent(me);
 				}
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				// Hide the menus, no matter when we click
 				mainMenu.setVisible(false);
 				toolsMenu.setVisible(false);
 				colorsMenu.setVisible(false);
 				if (e.getButton() == MouseEvent.BUTTON3) {
+					// If we right click, we have to show the menu, centered on our click
 					mainMenu.handlePlacement(getWidth(), getHeight(), e.getX(), e.getY());
 				}
 
@@ -177,6 +186,7 @@ public class paintCircular extends JFrame {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				if (tool != null) {
+					// Draw of different shapes, depending on the tools
 					switch (tool.type) {
 					case "pen":
 						Path2D.Double path = (Path2D.Double) tool.shape;
@@ -225,35 +235,35 @@ public class paintCircular extends JFrame {
 			}
 		});
 
-		add(new JToolBar() {
-			{
-				for (JButton tool : tools) {
-					add(tool);
-				}
-			}
-		}, BorderLayout.NORTH);
-		add(new JToolBar() {
-			{
-				for (JButton b : buttons) {
-					add(b);
-				}
-			}
-		}, BorderLayout.SOUTH);
-		add(panel = new JPanel() {
-			public void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				Graphics2D g2 = (Graphics2D) g;
-				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-				g2.setColor(Color.WHITE);
-				g2.fillRect(0, 0, getWidth(), getHeight());
-
-				for (int i = 0; i < shapes.size(); i++) {
-					g2.setColor(colors.get(i));
-					g2.draw(shapes.get(i));
-				}
-			}
-		});
+//		add(new JToolBar() {
+//			{
+//				for (JButton tool : tools) {
+//					add(tool);
+//				}
+//			}
+//		}, BorderLayout.NORTH);
+//		add(new JToolBar() {
+//			{
+//				for (JButton b : buttons) {
+//					add(b);
+//				}
+//			}
+//		}, BorderLayout.SOUTH);
+//		add(panel = new JPanel() {
+//			public void paintComponent(Graphics g) {
+//				super.paintComponent(g);
+//				Graphics2D g2 = (Graphics2D) g;
+//				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//
+//				g2.setColor(Color.WHITE);
+//				g2.fillRect(0, 0, getWidth(), getHeight());
+//
+//				for (int i = 0; i < shapes.size(); i++) {
+//					g2.setColor(colors.get(i));
+//					g2.draw(shapes.get(i));
+//				}
+//			}
+//		});
 
 		pack();
 		setVisible(true);
