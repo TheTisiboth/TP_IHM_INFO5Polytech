@@ -14,8 +14,11 @@ import javax.swing.JPanel;
 public class MenuItem extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	// The text that we display for the menu Item
 	private String text;
+	// The length of the menu item
 	private int length;
+	// The tool associated with this item
 	private JButton tool = null;
 
 	public MenuItem(String t, JButton tl) {
@@ -30,6 +33,11 @@ public class MenuItem extends JPanel {
 		this.setOpaque(false);
 	}
 
+	/**
+	 * Trigger of the tool linked with this item
+	 * @param x the x coordinate of the click
+	 * @param y the y coordinate of the click
+	 */
 	public void doClick(int x, int y) {
 		MouseEvent me = new MouseEvent(tool, // which
 				MouseEvent.MOUSE_CLICKED, // what
