@@ -229,35 +229,35 @@ public class paintCircular extends JFrame {
 			}
 		});
 
-//		add(new JToolBar() {
-//			{
-//				for (JButton tool : tools) {
-//					add(tool);
-//				}
-//			}
-//		}, BorderLayout.NORTH);
-//		add(new JToolBar() {
-//			{
-//				for (JButton b : buttons) {
-//					add(b);
-//				}
-//			}
-//		}, BorderLayout.SOUTH);
-//		add(panel = new JPanel() {
-//			public void paintComponent(Graphics g) {
-//				super.paintComponent(g);
-//				Graphics2D g2 = (Graphics2D) g;
-//				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//
-//				g2.setColor(Color.WHITE);
-//				g2.fillRect(0, 0, getWidth(), getHeight());
-//
-//				for (int i = 0; i < shapes.size(); i++) {
-//					g2.setColor(colors.get(i));
-//					g2.draw(shapes.get(i));
-//				}
-//			}
-//		});
+		add(new JToolBar() {
+			{
+				for (JButton tool : tools) {
+					add(tool);
+				}
+			}
+		}, BorderLayout.NORTH);
+		add(new JToolBar() {
+			{
+				for (JButton b : buttons) {
+					add(b);
+				}
+			}
+		}, BorderLayout.SOUTH);
+		add(panel = new JPanel() {
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				Graphics2D g2 = (Graphics2D) g;
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+				g2.setColor(Color.WHITE);
+				g2.fillRect(0, 0, getWidth(), getHeight());
+
+				for (int i = 0; i < shapes.size(); i++) {
+					g2.setColor(colors.get(i));
+					g2.draw(shapes.get(i));
+				}
+			}
+		});
 
 		pack();
 		setVisible(true);
