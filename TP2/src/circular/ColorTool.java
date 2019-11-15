@@ -1,10 +1,11 @@
-package tools;
-import main.paintCircular;
+package circular;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
+
+import marking.paintMarking;
 
 public class ColorTool extends JButton implements MouseListener {
 

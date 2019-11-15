@@ -1,4 +1,4 @@
-package main;
+package circular;
 //////////////////////////////////////////////////////////////////////////////
 // file    : Paint.java
 // content : basic painting app
@@ -27,12 +27,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
-
-import menus.CircularMenu;
-import menus.MenuItem;
-import tools.ColorTool;
-import tools.MenuTool;
-import tools.ShapeTool;
 
 /* paint *******************************************************************/
 

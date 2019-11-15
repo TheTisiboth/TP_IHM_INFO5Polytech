@@ -1,4 +1,4 @@
-package tools;
+package circular;
 
 import java.awt.Point;
 import java.awt.Shape;
@@ -7,7 +7,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 
-import main.paintCircular;
+import marking.paintMarking;
 
 public class ShapeTool extends JButton implements MouseListener {
 

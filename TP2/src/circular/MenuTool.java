@@ -1,4 +1,4 @@
-package tools;
+package circular;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -6,28 +6,45 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 
-import menus.CircularMenu;
+import marking.MarkingMenu;
+import marking.paintMarking;
 
 public class MenuTool extends JButton implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
 	Color color;
-	CircularMenu sub;
+	CircularMenu subC;
+	MarkingMenu subM;
 	int width, height;
+	String name;
 
-	public MenuTool(String name) {
-		super(name);
+	public MenuTool(String n) {
+		super(n);
+		name = n;
 	}
 
 	public void init(CircularMenu s, int w, int h) {
-		sub = s;
+		subC = s;
+		width = w;
+		height = h;
+		addMouseListener(this);
+	}
+	
+	public void init(MarkingMenu s, int w, int h) {
+		subM = s;
 		width = w;
 		height = h;
 		addMouseListener(this);
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		sub.handlePlacement(width, height, e.getX(), e.getY());
+		
+		if (subC != null) {
+			subC.handlePlacement(width, height, e.getX(), e.getY());
+		} else {
+			paintMarking.setSelected(name);
+			subM.handlePlacement(width, height, e.getX(), e.getY());
+		}
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package menus;
+package circular;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -145,7 +145,9 @@ public class CircularMenu extends JPanel {
 
 			public void mousePressed(MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON1) {
-					identifySection(e.getPoint()).doClick(getX() + e.getX(), getY() + e.getY());
+					if (identifySection(e.getPoint()) != null) {
+						identifySection(e.getPoint()).doClick(getX() + e.getX(), getY() + e.getY());
+					}
 				}
 				setVisible(false);
 			}
