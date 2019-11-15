@@ -1,3 +1,4 @@
+package main;
 //////////////////////////////////////////////////////////////////////////////
 // file    : Paint.java
 // content : basic painting app
@@ -27,9 +28,15 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
+import menus.CircularMenu;
+import menus.MenuItem;
+import tools.ColorTool;
+import tools.MenuTool;
+import tools.ShapeTool;
+
 /* paint *******************************************************************/
 
-class paint extends JFrame {
+public class paintCircular extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
@@ -110,7 +117,7 @@ class paint extends JFrame {
 	// | MAIN LOGIC FOR OUR APPLICATION | //
 	// ---------------------------------- //
 	@SuppressWarnings("serial")
-	public paint(String title) {
+	public paintCircular(String title) {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(1400, 1400));
@@ -257,7 +264,7 @@ class paint extends JFrame {
 	public static void main(String argv[]) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new paint("paint");
+				new paintCircular("paint");
 			}
 		});
 	}
