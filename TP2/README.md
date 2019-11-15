@@ -46,4 +46,5 @@ Même Fonctionnalité que le circular menu. On commence par un clic droit, ce qu
 Il est tres similaire au circular menu. Nous avons ajouté une "dead zone" centrale. C'est un cercle au centre du circular menu, dans le quel on ne peut effectuer aucune action, ce qui nous laisse une marge de manoeuvre afin de nous déplacer pour selectionner un item.
 
 ### Work in progress
+Le menu marche plus ou moins lorsque on le place en haut a gauche sur l'écran.
 L'implémentation est en cours. On peut clic droit sur l'ecran, puis tout en maintenant le clic, on peut se déplacer pour sélectionner un sous menu, ce qui a pour effet de cacher le menu courant, et d'afficher le nouveau sous menu, ou de selectionner l'item courant. En revanche, on a du mal au niveau de la selection de sous menu, ou d'item, cette partie est en cours d'implémentation. Cela est dû à un probleme de coordonnées absolues/relatives.
