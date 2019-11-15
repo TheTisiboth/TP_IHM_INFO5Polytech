@@ -19,12 +19,14 @@ public class CircularMenu extends JPanel {
 	private int radius_border;
 	private int diameter_border;
 	private Point center;
+	private int distMin;
 
 	private void init(ArrayList<MenuItem> l, int rT) {
 		list = l;
 		radius_text = rT;
 		radius_border = (int) (radius_text * 1.5);
 		diameter_border = radius_border * 2;
+		distMin = 25;
 		int extraItems;
 		if (list.size() <= 8) {
 			extraItems = 0;
@@ -119,14 +121,17 @@ public class CircularMenu extends JPanel {
 			g2d.setColor(Color.BLACK);
 			g2d.drawLine((int) (center.getX()), (int) (center.getY()), s1.x, s1.y);
 		}
-		g2d.setColor(Color.BLACK);
-		g2d.drawOval(0, 0, diameter_border - 1, diameter_border - 1);
 		s1 = new Point(
 				(int) (center.getX() + radius_border * Math.cos(Math.PI * (startAngle + arcAngle * sectionsNbr) / 180)),
 				(int) (diameter_border - (center.getY()
 						+ radius_border * Math.sin(Math.PI * (startAngle + arcAngle * sectionsNbr) / 180))));
 		g2d.setColor(Color.BLACK);
 		g2d.drawLine((int) (center.getX()), (int) (center.getY()), s1.x, s1.y);
+		g2d.setColor(Color.WHITE);
+		g2d.fillOval((int) (center.getX()-distMin),(int) (center.getY()-distMin), distMin*2, distMin*2);
+		g2d.setColor(Color.BLACK);
+		g2d.drawOval(0, 0, diameter_border - 1, diameter_border - 1);
+		g2d.drawOval((int) (center.getX()-distMin),(int) (center.getY()-distMin), distMin*2, distMin*2);
 	}
 
 	private void addListener() {
@@ -166,6 +171,9 @@ public class CircularMenu extends JPanel {
 		int sectionsNbr;
 		int index = -1;
 		int taille;
+		if (dist < distMin) {
+			return null;
+		}
 		if (list.size() <= 8) {
 			sectionsNbr = list.size();
 			if (dist > radius_border) {
