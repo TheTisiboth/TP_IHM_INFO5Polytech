@@ -3,7 +3,7 @@
 ## Présentation du Circular menu
 
 ### Fonctionnalités
-
+Le Circular menu est completement fonctionnel. Pour l'utiliser, on peut faire les actions suivantes :   
 Clic droit dans la fenetre -> ouverture du menu circulaire.   
 Si l'on refait un clic droit a un autre endroit de la fenetre, on ferme le menu circulaire, et on le réouvre à l'endroit cliqué.   
 Clic gauche dans le menu -> selectionne un item du menu. 
@@ -33,7 +33,7 @@ Il faut lancer le programme contenu dans paintCircular, dans le package main.
 ## Présentation du Marking Menu
 
 ### Fonctionnalités
-
+Le marking menu est accessible depuis la branche TP2-MarkingMenu.
 Même Fonctionnalité que le circular menu. On commence par un clic droit, ce qui affiche le circular menu. Ensuite, tout en maintenant le clic droit, on se déplace vers l'outils choisit, pour le selectionner. Si c'est un sous menu, alors on l'affiche, et il faut continuer a maintenir le clic droit et se déplacer jusqu'au prochain item pour le selectionner.
 
 ### Contenu du menu
