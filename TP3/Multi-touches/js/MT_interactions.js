@@ -1,6 +1,6 @@
-System.register(["./FSM"], function (exports_1, context_1) {
+System.register(["./FSM", "./transfo"], function (exports_1, context_1) {
     "use strict";
-    var FSM_1, $;
+    var FSM_1, transfo, $;
     var __moduleName = context_1 && context_1.id;
     function multiTouch(element) {
         let pointerId_1, Pt1_coord_element, Pt1_coord_parent, pointerId_2, Pt2_coord_element, Pt2_coord_parent, originalMatrix, getRelevantDataFromEvent = (evt) => {
@@ -22,37 +22,47 @@ System.register(["./FSM"], function (exports_1, context_1) {
             initialState: MT_STATES.Inactive,
             states: [MT_STATES.Inactive, MT_STATES.Translating, MT_STATES.Rotozooming],
             transitions: [
-                { from: MT_STATES.Inactive, to: MT_STATES.Translating,
+                {
+                    from: MT_STATES.Inactive, to: MT_STATES.Translating,
                     eventTargets: [element],
                     eventName: ["touchstart"],
                     useCapture: false,
                     action: (evt) => {
-                        // To be completed
+                        pointerId_1 = evt.changedTouches.item(0).identifier;
+                        let touch = getRelevantDataFromEvent(evt);
+                        originalMatrix = transfo.getMatrixFromElement(element);
+                        Pt1_coord_parent = transfo.getPoint(touch.clientX, touch.clientY);
+                        Pt1_coord_element = Pt1_coord_parent.matrixTransform(originalMatrix.inverse());
                         return true;
                     }
                 },
-                { from: MT_STATES.Translating, to: MT_STATES.Translating,
+                {
+                    from: MT_STATES.Translating, to: MT_STATES.Translating,
                     eventTargets: [document],
                     eventName: ["touchmove"],
                     useCapture: true,
                     action: (evt) => {
                         evt.preventDefault();
                         evt.stopPropagation();
-                        // To be completed
+                        let touch = getRelevantDataFromEvent(evt);
+                        Pt1_coord_parent = transfo.getPoint(touch.clientX, touch.clientY);
+                        transfo.drag(element, originalMatrix, Pt1_coord_element, Pt1_coord_parent);
                         return true;
                     }
                 },
-                { from: MT_STATES.Translating,
+                {
+                    from: MT_STATES.Translating,
                     to: MT_STATES.Inactive,
                     eventTargets: [document],
                     eventName: ["touchend"],
                     useCapture: true,
                     action: (evt) => {
-                        // To be completed
+                        pointerId_1 = null;
                         return true;
                     }
                 },
-                { from: MT_STATES.Translating, to: MT_STATES.Rotozooming,
+                {
+                    from: MT_STATES.Translating, to: MT_STATES.Rotozooming,
                     eventTargets: [element],
                     eventName: ["touchstart"],
                     useCapture: false,
@@ -61,7 +71,8 @@ System.register(["./FSM"], function (exports_1, context_1) {
                         return true;
                     }
                 },
-                { from: MT_STATES.Rotozooming, to: MT_STATES.Rotozooming,
+                {
+                    from: MT_STATES.Rotozooming, to: MT_STATES.Rotozooming,
                     eventTargets: [document],
                     eventName: ["touchmove"],
                     useCapture: true,
@@ -72,7 +83,8 @@ System.register(["./FSM"], function (exports_1, context_1) {
                         return true;
                     }
                 },
-                { from: MT_STATES.Rotozooming,
+                {
+                    from: MT_STATES.Rotozooming,
                     to: MT_STATES.Translating,
                     eventTargets: [document],
                     eventName: ["touchend"],
@@ -97,6 +109,9 @@ System.register(["./FSM"], function (exports_1, context_1) {
         setters: [
             function (FSM_1_1) {
                 FSM_1 = FSM_1_1;
+            },
+            function (transfo_1) {
+                transfo = transfo_1;
             }
         ],
         execute: function () {

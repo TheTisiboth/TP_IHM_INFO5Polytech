@@ -46,7 +46,9 @@ System.register([], function (exports_1, context_1) {
             });
             //______________________________________________________________________________________________________________________
             exports_1("drag", drag = (element, originalMatrix, Pt_coord_element, Pt_coord_parent) => {
-                // TO BE DONE
+                let e = Pt_coord_parent.x - originalMatrix.a * Pt_coord_element.x - originalMatrix.c * Pt_coord_element.y;
+                let f = Pt_coord_parent.y - originalMatrix.b * Pt_coord_element.x - originalMatrix.d * Pt_coord_element.y;
+                setMatrixCoordToElement(element, originalMatrix.a, originalMatrix.b, originalMatrix.c, originalMatrix.d, e, f);
             });
             //______________________________________________________________________________________________________________________
             exports_1("rotozoom", rotozoom = (element, originalMatrix, Pt1_coord_element, Pt1_coord_parent, Pt2_coord_element, Pt2_coord_parent) => {
