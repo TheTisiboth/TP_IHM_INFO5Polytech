@@ -69,6 +69,26 @@ export let rotozoom =   ( element           : HTMLElement
                         , Pt2_coord_element : SVGPoint
                         , Pt2_coord_parent  : SVGPoint
                         ) => {
-	// TO BE DONE
+	let dx: number = Pt2_coord_element.x - Pt1_coord_element.x;
+    let dy: number = Pt2_coord_element.y - Pt1_coord_element.y;
+    let dx2: number = Pt2_coord_parent.x - Pt1_coord_parent.x;
+    let dy2: number = Pt2_coord_parent.y - Pt1_coord_parent.y;
+    let s, c: number;
+
+    if (dx === 0 && dy !== 0) {
+        s = -dx2/dy;
+        c = dy2/dy;
+    } else if (dx !== 0 && dy === 0) {
+        s = dy2/dx;
+        c = dx2/dx;
+    } else if (dx !== 0 && dy !== 0) {
+        s = (dy2/dy - dx2/dx) / (dy/dx + dx/dy);
+        c = (dx2 + s*dy)/dx;
+    }
+
+    let e: number = Pt1_coord_parent.x - c * Pt1_coord_element.x + s * Pt1_coord_element.y;
+    let f: number = Pt1_coord_parent.y - s * Pt1_coord_element.x - c * Pt1_coord_element.y;
+
+    setMatrixCoordToElement(element, c, s, -s, c, e, f);
 };
 

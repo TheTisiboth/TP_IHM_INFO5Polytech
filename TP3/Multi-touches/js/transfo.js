@@ -52,7 +52,26 @@ System.register([], function (exports_1, context_1) {
             });
             //______________________________________________________________________________________________________________________
             exports_1("rotozoom", rotozoom = (element, originalMatrix, Pt1_coord_element, Pt1_coord_parent, Pt2_coord_element, Pt2_coord_parent) => {
-                // TO BE DONE
+                let dx = Pt2_coord_element.x - Pt1_coord_element.x;
+                let dy = Pt2_coord_element.y - Pt1_coord_element.y;
+                let dx2 = Pt2_coord_parent.x - Pt1_coord_parent.x;
+                let dy2 = Pt2_coord_parent.y - Pt1_coord_parent.y;
+                let s, c;
+                if (dx === 0 && dy !== 0) {
+                    s = -dx2 / dy;
+                    c = dy2 / dy;
+                }
+                else if (dx !== 0 && dy === 0) {
+                    s = dy2 / dx;
+                    c = dx2 / dx;
+                }
+                else if (dx !== 0 && dy !== 0) {
+                    s = (dy2 / dy - dx2 / dx) / (dy / dx + dx / dy);
+                    c = (dx2 + s * dy) / dx;
+                }
+                let e = Pt1_coord_parent.x - c * Pt1_coord_element.x + s * Pt1_coord_element.y;
+                let f = Pt1_coord_parent.y - s * Pt1_coord_element.x - c * Pt1_coord_element.y;
+                setMatrixCoordToElement(element, c, s, -s, c, e, f);
             });
         }
     };
