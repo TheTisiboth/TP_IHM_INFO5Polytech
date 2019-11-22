@@ -28,6 +28,7 @@ System.register(["./FSM", "./transfo"], function (exports_1, context_1) {
                     eventName: ["touchstart"],
                     useCapture: false,
                     action: (evt) => {
+                        evt.preventDefault();
                         pointerId_1 = evt.changedTouches.item(0).identifier;
                         let touch = getRelevantDataFromEvent(evt);
                         originalMatrix = transfo.getMatrixFromElement(element);
@@ -57,6 +58,7 @@ System.register(["./FSM", "./transfo"], function (exports_1, context_1) {
                     eventName: ["touchend"],
                     useCapture: true,
                     action: (evt) => {
+                        evt.preventDefault();
                         pointerId_1 = null;
                         return true;
                     }
@@ -67,7 +69,11 @@ System.register(["./FSM", "./transfo"], function (exports_1, context_1) {
                     eventName: ["touchstart"],
                     useCapture: false,
                     action: (evt) => {
-                        // To be completed
+                        evt.preventDefault();
+                        pointerId_2 = evt.changedTouches.item(0).identifier;
+                        let touch = getRelevantDataFromEvent(evt);
+                        Pt2_coord_parent = transfo.getPoint(touch.clientX, touch.clientY);
+                        Pt2_coord_element = Pt2_coord_parent.matrixTransform(originalMatrix.inverse());
                         return true;
                     }
                 },
@@ -79,7 +85,14 @@ System.register(["./FSM", "./transfo"], function (exports_1, context_1) {
                     action: (evt) => {
                         evt.preventDefault();
                         evt.stopPropagation();
-                        // To be completed
+                        let touch = getRelevantDataFromEvent(evt);
+                        if (touch.identifier === pointerId_1) {
+                            Pt1_coord_parent = transfo.getPoint(touch.clientX, touch.clientY);
+                        }
+                        else if (touch.identifier === pointerId_2) {
+                            Pt2_coord_parent = transfo.getPoint(touch.clientX, touch.clientY);
+                        }
+                        transfo.rotozoom(element, originalMatrix, Pt1_coord_element, Pt1_coord_parent, Pt2_coord_element, Pt2_coord_parent);
                         return true;
                     }
                 },
@@ -90,8 +103,12 @@ System.register(["./FSM", "./transfo"], function (exports_1, context_1) {
                     eventName: ["touchend"],
                     useCapture: true,
                     action: (evt) => {
-                        const touch = getRelevantDataFromEvent(evt);
-                        // To be completed
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                        pointerId_2 = null;
+                        let touch = getRelevantDataFromEvent(evt);
+                        Pt1_coord_parent = transfo.getPoint(touch.clientX, touch.clientY);
+                        Pt1_coord_element = Pt1_coord_parent.matrixTransform(originalMatrix.inverse());
                         return true;
                     }
                 }
